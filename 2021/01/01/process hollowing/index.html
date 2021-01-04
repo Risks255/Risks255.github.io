@@ -270,7 +270,7 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2021-01-02 18:03:01'>2021-01-01 20:25</time>
+            Created At : <time class="date" title='Updated At: 2021-01-04 20:09:16'>2021-01-01 20:25</time>
         
     </div>
     <div class="article-meta">
@@ -323,7 +323,7 @@
       
         <p><strong>2021年第一篇技术分析文章，有不足之处还请大家多多包涵。</strong></p>
 <h2 id="进程替换技术-process-hollowing"><a href="#进程替换技术-process-hollowing" class="headerlink" title="进程替换技术(process hollowing)"></a>进程替换技术(process hollowing)</h2><p>通过对API的调用，实现文件不落地的一种技术。需要编译选项/DYNAMICBASE or /FIXED 其中一个为NO 目的是取消生成重定位表，这里已/DYNAMICBASE为例子。</p>
-<p><img src="https://i.loli.net/2021/01/02/4kBSKJlhu3vGcqd.png" alt="编译设置"></p>
+<p><img src="%E7%BC%96%E8%AF%91%E8%AE%BE%E7%BD%AE.png" alt="编译设置"></p>
 <pre><code>涉及的API使用情况和相关重定位的计算方式。
 CreateProcess               //以CREATE_SUSPENDED挂起状态创建进程
 ZwUnmapviewOfSection       //释放目标进程内存，解除内存映射
@@ -698,26 +698,26 @@ ResumeThread</code></pre>
 &#125;</code></pre>
 <p>自此，整个代码流程就讲解完成如有什么疑问，可自行查询相关资料或者留言告知我。</p>
 <h3 id="HelloWorld演示"><a href="#HelloWorld演示" class="headerlink" title="HelloWorld演示"></a>HelloWorld演示</h3><p>接下来进行调试演示，通过调试发现Creating process的进程是cmd，并且为Suspended，符合之前的描述过程。</p>
-<p><img src="https://i.loli.net/2021/01/02/fb9VZzMQeaKBLXp.png" alt="进程创建情况"></p>
+<p><img src="%E8%BF%9B%E7%A8%8B%E5%88%9B%E5%BB%BA%E6%83%85%E5%86%B5.png" alt="进程创建情况"></p>
 <p>获取到cmd相关结构信息。</p>
-<p><img src="https://i.loli.net/2021/01/02/cPv2N8mJWLxtIwu.png" alt="相关模块信息"></p>
+<p><img src="%E7%9B%B8%E5%85%B3%E6%A8%A1%E5%9D%97%E4%BF%A1%E6%81%AF.png" alt="相关模块信息"></p>
 <p>获取重定位的目标差。</p>
-<p><img src="https://i.loli.net/2021/01/02/6Ms7BQcS9AaqHln.png" alt="重定位差"></p>
+<p><img src="%E9%87%8D%E5%AE%9A%E4%BD%8D%E5%B7%AE.png" alt="重定位差"></p>
 <p>由于HelloWorld.exe本身没有重定位表，所以调试的时候一直没有进入相关函数。</p>
 <h3 id="DLL调试"><a href="#DLL调试" class="headerlink" title="DLL调试"></a>DLL调试</h3><p>这里自写一个dll来替代HelloWorld。</p>
-<p><img src="https://i.loli.net/2021/01/02/L7f3qovD4bIiuRc.png" alt="DLL代码"></p>
+<p><img src="DLL%E4%BB%A3%E7%A0%81.png" alt="DLL代码"></p>
 <p>通过调试发现dwEntryCount值为136，目前还没有搞明白是什么意思。</p>
-<p><img src="https://i.loli.net/2021/01/02/X8Jxrh5HGcuIifK.png" alt="dwEntryCount"></p>
+<p><img src="dwEntryCount.png" alt="dwEntryCount"></p>
 <p>最后通过打印，发现一共找到了148个重定位函数，有些不可思议。</p>
-<p><img src="https://i.loli.net/2021/01/02/8ek1nqp9uS2wKOg.png" alt="重定位函数个数"></p>
+<p><img src="%E9%87%8D%E5%AE%9A%E4%BD%8D%E5%87%BD%E6%95%B0%E4%B8%AA%E6%95%B0.png" alt="重定位函数个数"></p>
 <p>借助studype来看一下重定位表的情况，0x88+0xE=0x96=226，比输出的148大，通过内容发现有些是00，所以我选择相信有148个需要重定位的函数。</p>
-<p><img src="https://i.loli.net/2021/01/02/FT5dRYbtuclfPmW.png" alt="查看重定位表情况"></p>
+<p><img src="%E6%9F%A5%E7%9C%8B%E9%87%8D%E5%AE%9A%E4%BD%8D%E8%A1%A8%E6%83%85%E5%86%B5.png" alt="查看重定位表情况"></p>
 <p>新的程序入口点为0xABB829A即将赋值给eax+0xb0这里。</p>
-<p><img src="https://i.loli.net/2021/01/02/8uO7CtdUQAp21os.png" alt="入口点赋值"></p>
+<p><img src="%E5%85%A5%E5%8F%A3%E7%82%B9%E8%B5%8B%E5%80%BC.png" alt="入口点赋值"></p>
 <p>通过另一个调试器附件进程，如果附加失败则在CreateProcess之后就附加即可。</p>
-<p><img src="https://i.loli.net/2021/01/02/CMWpl69YvDE8nhJ.png" alt="入口点信息"></p>
+<p><img src="%E5%85%A5%E5%8F%A3%E7%82%B9%E4%BF%A1%E6%81%AF.png" alt="入口点信息"></p>
 <p>成功弹出MessageBox，整体调试完毕。</p>
-<p><img src="https://i.loli.net/2021/01/02/jgHm2N5L9bISxGR.png" alt="成功弹框"></p>
+<p><img src="%E6%88%90%E5%8A%9F%E5%BC%B9%E6%A1%86.png" alt="成功弹框"></p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以通过评论或者QQ972476182联系我。 </span>
