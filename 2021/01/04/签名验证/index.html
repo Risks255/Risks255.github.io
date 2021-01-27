@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>404 | Risks&#39;s blog</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="404 | Risks&#39;s blog">
+  <title>签名验证 | Risks&#39;s blog</title>
+  <meta name="keywords" content=" 签名验证 ">
+  <meta name="description" content="签名验证 | Risks&#39;s blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="404 Not Found：该页无法显示很抱歉，您所访问的地址并不存在">
 <meta property="og:type" content="website">
@@ -333,24 +333,39 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+        <article id="post-签名验证" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">404</h1>
+        <h1 class="article-title">签名验证</h1>
     
     <div class="article-meta">
         
         
         
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="签名验证">签名验证</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color5">签名验证</a>
+            
+        </span>
         
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2020-12-21 17:45:07'>2020-12-26 09:43</time>
+            Created At : <time class="date" title='Updated At: 2021-01-07 14:16:05'>2021-01-04 14:44</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:23</span>
+        <span>Count:742</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -380,7 +395,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#404-Not-Found%EF%BC%9A%E8%AF%A5%E9%A1%B5%E6%97%A0%E6%B3%95%E6%98%BE%E7%A4%BA"><span class="toc-text">404 Not Found：该页无法显示</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%81%E4%B9%A6%E7%94%9F%E6%88%90"><span class="toc-text">证书生成</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%81%E4%B9%A6%E7%AD%BE%E5%90%8D"><span class="toc-text">证书签名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%81%E4%B9%A6%E5%AE%9A%E4%BD%8D"><span class="toc-text">证书定位</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%81%E4%B9%A6%E4%BC%AA%E9%80%A0"><span class="toc-text">证书伪造</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%81%E4%B9%A6%E9%AA%8C%E8%AF%81"><span class="toc-text">证书验证</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -396,7 +411,153 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="404-Not-Found：该页无法显示"><a href="#404-Not-Found：该页无法显示" class="headerlink" title="404 Not Found：该页无法显示"></a>404 Not Found：该页无法显示</h2><p><strong>很抱歉，您所访问的地址并不存在</strong></p>
+        <h2 id="证书生成"><a href="#证书生成" class="headerlink" title="证书生成"></a>证书生成</h2><pre><code>makecert /?和makecert /!        //帮助信息
+-n   &lt;X509name&gt;     Certificate subject X500 name (eg: CN=Fred Dews)
+-r                  Create a self signed certificate
+-sc  &lt;file&gt;         Subject&#39;s certificate file
+-sv  &lt;pvkFile&gt;      Subject&#39;s PVK file; To be created if not present
+-ic  &lt;file&gt;         Issuer&#39;s certificate file
+-iv  &lt;pvkFile&gt;      Issuer&#39;s PVK file
+-a   &lt;algorithm&gt;    The signature&#39;s digest algorithm.
+                    &lt;md5|sha1|sha256|sha384|sha512&gt;.  Default to &#39;sha1&#39;
+
+makecert -n &quot;cn=root&quot; -r -sv sha1.pvk sha1.cer
+makecert.exe  -n &quot;cn=root&quot; -r -a sha256 -sv sha256.pvk sha256.cer
+makecert -n &quot;cn=child&quot; -iv sha1.pvk -ic sha1.cer -sv sha1_child.pvk sha1_child.cer</code></pre>
+<h2 id="证书签名"><a href="#证书签名" class="headerlink" title="证书签名"></a>证书签名</h2><pre><code>pvk2pfx.exe -h
+Usage:
+        -pvk &lt;pvk-file&gt;  - input PVK file name.
+        -spc &lt;spc-file&gt;  - input SPC file name.
+        -pfx &lt;pfx-file&gt;  - output PFX file name.
+        -pi &lt;pvk-pswd&gt;   - PVK password.
+        -po &lt;pfx-pswd&gt;   - PFX password; same as -pi if not given.
+        -f               - force overwrite existing PFX file.
+
+        if -pfx option is not given, an export wizard will pop up. in
+        this case, options -po and -f are ignored.
+
+pvk2pfx -pvk sha1.pvk -pi 123456 -spc sha1.cer -pfx sha1.pfx -f
+
+signtool -h
+  Valid commands:
+    sign       --  Sign files using an embedded signature.
+    timestamp  --  Timestamp previously-signed files.
+    verify     --  Verify embedded or catalog signatures.
+    catdb      --  Modify a catalog database.
+    remove     --  Remove embedded signature(s) or reduce the size of an
+                   embedded signed file    
+
+signtool.exe sign /f sha1.pfx /p 123456 /t http://timestamp.verisign.com/scripts/timstamp.dll SignTest.exe
+signtool.exe sign /f sha256.pfx /p 123456 /as /fd sha256 /tr http://sha256timestamp.ws.symantec.com/sha256/timestamp SignTest.exe
+
+代码签名可选的时间戳服务器：
+
+品牌
+
+SHA1时间戳
+
+SHA256时间戳
+
+Symantec
+
+http://timestamp.verisign.com/scripts/timstamp.dll
+
+http://sha256timestamp.ws.symantec.com/sha256/timestamp
+
+GlobalSign
+
+http://timestamp.globalsign.com/scripts/timestamp.dll
+
+http://timestamp.globalsign.com/?signature=sha2</code></pre>
+<h2 id="证书定位"><a href="#证书定位" class="headerlink" title="证书定位"></a>证书定位</h2><pre><code>Security Directory RVA代码数字签名在PE文件中的偏移位置 
+Security DirectorySize代表数字签名的长度
+将这部分内容提取，复制到另一个文件test.exe的尾部，同时使用CFF Explorer修改test.exe对应的Security Directory RVA和Security DirectorySize</code></pre>
+<p><img src="%E7%AD%BE%E5%90%8DRVA.png" alt="签名RVA"></p>
+<h2 id="证书伪造"><a href="#证书伪造" class="headerlink" title="证书伪造"></a>证书伪造</h2><pre><code>开源工具SigThief.py
+https://github.com/secretsquirrel/SigThief</code></pre>
+<h2 id="证书验证"><a href="#证书验证" class="headerlink" title="证书验证"></a>证书验证</h2><pre><code>powershell Get-AuthenticodeSignature filename //系统自带校验
+
+BOOL CheckFileTrust(LPCWSTR lpFileName)
+&#123;
+    BOOL bRet = FALSE;
+    WINTRUST_DATA wd = &#123; 0 &#125;;
+    WINTRUST_FILE_INFO wfi = &#123; 0 &#125;;
+    WINTRUST_CATALOG_INFO wci = &#123; 0 &#125;;
+    CATALOG_INFO ci = &#123; 0 &#125;;
+
+    HCATADMIN hCatAdmin = NULL;
+    if (!CryptCATAdminAcquireContext(&amp;amp; hCatAdmin, NULL, 0))
+    &#123;
+        return FALSE;
+    &#125;
+
+    HANDLE hFile = CreateFileW(lpFileName, GENERIC_READ, FILE_SHARE_READ,
+        NULL, OPEN_EXISTING, 0, NULL);
+    if (INVALID_HANDLE_VALUE == hFile)
+    &#123;
+        CryptCATAdminReleaseContext(hCatAdmin, 0);
+        return FALSE;
+    &#125;
+
+    DWORD dwCnt = 100;
+    BYTE byHash[100];
+    CryptCATAdminCalcHashFromFileHandle(hFile, &amp;amp; dwCnt, byHash, 0);
+    CloseHandle(hFile);
+
+    LPWSTR pszMemberTag = new WCHAR[dwCnt * 2 + 1];
+    for (DWORD dw = 0; dw &amp; lt; dwCnt; ++dw)
+    &#123;
+        wsprintfW(&amp;amp; pszMemberTag[dw * 2], L&quot;%02X&quot;, byHash[dw]);
+    &#125;
+
+    HCATINFO hCatInfo = CryptCATAdminEnumCatalogFromHash(hCatAdmin,
+        byHash, dwCnt, 0, NULL);
+    if (NULL == hCatInfo) // 编录中没有则验证是否有嵌入式签名
+    &#123;
+        wfi.cbStruct = sizeof(WINTRUST_FILE_INFO);
+        wfi.pcwszFilePath = lpFileName;
+        wfi.hFile = NULL;
+        wfi.pgKnownSubject = NULL;
+
+        wd.cbStruct = sizeof(WINTRUST_DATA);
+        wd.dwUnionChoice = WTD_CHOICE_FILE;
+        wd.pFile = &amp;amp; wfi;
+        wd.dwUIChoice = WTD_UI_NONE;
+        wd.fdwRevocationChecks = WTD_REVOKE_NONE;
+        wd.dwStateAction = WTD_STATEACTION_IGNORE;
+        wd.dwProvFlags = WTD_SAFER_FLAG;
+        wd.hWVTStateData = NULL;
+        wd.pwszURLReference = NULL;
+    &#125;
+    else // 编录中有，验证编录文件的签名是否有效
+    &#123;
+        CryptCATCatalogInfoFromContext(hCatInfo, &amp;amp; ci, 0);
+        wci.cbStruct = sizeof(WINTRUST_CATALOG_INFO);
+        wci.pcwszCatalogFilePath = ci.wszCatalogFile;
+        wci.pcwszMemberFilePath = lpFileName;
+        wci.pcwszMemberTag = pszMemberTag;
+
+        wd.cbStruct = sizeof(WINTRUST_DATA);
+        wd.dwUnionChoice = WTD_CHOICE_CATALOG;
+        wd.pCatalog = &amp;amp; wci;
+        wd.dwUIChoice = WTD_UI_NONE;
+        wd.fdwRevocationChecks = WTD_STATEACTION_VERIFY;
+        wd.dwProvFlags = 0;
+        wd.hWVTStateData = NULL;
+        wd.pwszURLReference = NULL;
+    &#125;
+    GUID action = WINTRUST_ACTION_GENERIC_VERIFY_V2;
+    HRESULT hr = WinVerifyTrust(NULL, &amp;amp; action, &amp;amp; wd);
+    bRet = SUCCEEDED(hr);
+
+    if (NULL != hCatInfo)
+    &#123;
+        CryptCATAdminReleaseCatalogContext(hCatAdmin, hCatInfo, 0);
+    &#125;
+    CryptCATAdminReleaseContext(hCatAdmin, 0);
+    delete[] pszMemberTag;
+    return bRet;
+&#125;</code></pre>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以通过评论或者QQ972476182联系我。 </span>

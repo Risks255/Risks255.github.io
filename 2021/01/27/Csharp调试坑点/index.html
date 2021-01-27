@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>404 | Risks&#39;s blog</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="404 | Risks&#39;s blog">
+  <title>C#调试坑点 | Risks&#39;s blog</title>
+  <meta name="keywords" content=" Csharp调试 ">
+  <meta name="description" content="C#调试坑点 | Risks&#39;s blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="404 Not Found：该页无法显示很抱歉，您所访问的地址并不存在">
 <meta property="og:type" content="website">
@@ -333,24 +333,39 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+        <article id="post-Csharp调试坑点" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">404</h1>
+        <h1 class="article-title">C#调试坑点</h1>
     
     <div class="article-meta">
         
         
         
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="Csharp调试">Csharp调试</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color4">Csharp调试</a>
+            
+        </span>
         
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2020-12-21 17:45:07'>2020-12-26 09:43</time>
+            Created At : <time class="date" title='Updated At: 2021-01-27 21:05:06'>2021-01-27 12:19</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:23</span>
+        <span>Count:619</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -380,7 +395,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#404-Not-Found%EF%BC%9A%E8%AF%A5%E9%A1%B5%E6%97%A0%E6%B3%95%E6%98%BE%E7%A4%BA"><span class="toc-text">404 Not Found：该页无法显示</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#C-%E8%B0%83%E8%AF%95%E5%9D%91%E7%82%B9"><span class="toc-text">C#调试坑点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%8D%E7%82%B9"><span class="toc-text">重点</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -396,7 +411,40 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="404-Not-Found：该页无法显示"><a href="#404-Not-Found：该页无法显示" class="headerlink" title="404 Not Found：该页无法显示"></a>404 Not Found：该页无法显示</h2><p><strong>很抱歉，您所访问的地址并不存在</strong></p>
+        <h2 id="C-调试坑点"><a href="#C-调试坑点" class="headerlink" title="C#调试坑点"></a>C#调试坑点</h2><p>最近刚好遇到了一些关于C#程序的调试，正好又有些不太记得dnspy的用法了，遂进行动态调试却发现了一些有趣的问题。</p>
+<p>使用Dnspy加载程序看到了奇怪的东西，并非是以往常见的C#结构，而是出现的JS Module，应该是引用了JS相关代码。</p>
+<p><img src="%E5%8A%A0%E8%BD%BD%E6%96%87%E4%BB%B6.png" alt="加载文件"></p>
+<p>在ShellCodeExec部分发现了shellcode。</p>
+<p><img src="%E5%8F%91%E7%8E%B0shellcode.png" alt="发现shellcode"></p>
+<p>对其进行base64解密并使用自写的加载器读取文件内容，发现很像msf生成的payload。</p>
+<p><img src="load%E5%8A%A0%E8%BD%BD.png" alt="load加载"></p>
+<p>本以为此次调试应该就到此为止了，没想到，想不到，居然出现了异常。</p>
+<p><img src="%E5%AD%98%E5%9C%A8%E5%BC%82%E5%B8%B8.png" alt="存在异常"></p>
+<p>一度以为这是代码加了反调试，看着多余的部分有点像花指令，便想着如何去除花指令，但是最后都没有结果。</p>
+<p><img src="%E7%96%91%E4%BC%BC%E8%8A%B1%E6%8C%87%E4%BB%A4.png" alt="疑似花指令"></p>
+<p>无奈之下又回到了Dnspy调试C#程序，一路调试发现和之前预料的一样，就是这段shellcode但是为什么无法直接调试呢？</p>
+<p>但是！！！</p>
+<p>发现Dnspy好像不像OD一样可以直接跳转到对应的API调用，找到了CreateThread的调用，但是无法进行线程调试。</p>
+<p>当时我人就傻眼了。于是便陷入了死循环浪费了不少时间。</p>
+<p>直到后面我发现了一个内存地址，便使用OD附加了进程，跳转到了对应的内存发现了不得了的东西。</p>
+<p><img src="%E5%86%85%E5%AD%98%E5%9C%B0%E5%9D%80.png" alt="内存地址"></p>
+<p>疑似shellcode的一部分代码。</p>
+<p><img src="%E7%96%91%E4%BC%BCshellcode.png" alt="疑似shellcode"></p>
+<p>于是在头部下好断点让程序跑起来，中断在断点位置。</p>
+<p>第一个loop用于解密当前所在位置的内容。</p>
+<p><img src="%E7%AC%AC%E4%B8%80%E6%AE%B5%E8%87%AA%E4%BF%AE%E6%94%B9.png" alt="第一段自修改"></p>
+<p>进入函数发现第二个loop，当解密出前6个字节时，我开始有点确信这是msf的reverse_tcp的payload了。</p>
+<p><img src="%E7%AC%AC%E4%BA%8C%E6%AE%B5%E8%87%AA%E4%BF%AE%E6%94%B9.png" alt="第二段自修改"></p>
+<p>直到最后完全解密完成，我确定这就是msf的reverse_tcp的payload了。</p>
+<p><img src="msf%E7%9A%84reverstcp%E4%BB%A3%E7%A0%81.png" alt="msf的reverstcp代码"></p>
+<p>看了整个内存的shellcode内容，发现一个问题为什么直接从C#中得到的解密base64和程序得到的结果不一致。</p>
+<p>我想大概可能是作者在制作的时候故意这样设计的。</p>
+<h2 id="重点"><a href="#重点" class="headerlink" title="重点"></a>重点</h2><p>Dnspy作为C#调试软件，重要性无可厚非，但却存在一些不足。</p>
+<p>比如无法跟踪API，无法跳转到内存，这些部分OD都可以帮助完成。</p>
+<p><strong>记笔记，记笔记，记笔记，重要的话说三遍。</strong></p>
+<p><strong>C#程序动态调试使用Dnspy，内存数据使用OD。</strong></p>
+<p>基本上离成功就不远了。</p>
+<p>——敬被坑的我</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以通过评论或者QQ972476182联系我。 </span>

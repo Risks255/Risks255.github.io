@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>404 | Risks&#39;s blog</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="404 | Risks&#39;s blog">
+  <title>日志分析 | Risks&#39;s blog</title>
+  <meta name="keywords" content=" 日志分析 , 加固 ">
+  <meta name="description" content="日志分析 | Risks&#39;s blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="404 Not Found：该页无法显示很抱歉，您所访问的地址并不存在">
 <meta property="og:type" content="website">
@@ -333,24 +333,41 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+        <article id="post-日志分析" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">404</h1>
+        <h1 class="article-title">日志分析</h1>
     
     <div class="article-meta">
         
         
         
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="日志分析">日志分析</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color5">日志分析</a>
+            
+            <a class="color3">加固</a>
+            
+        </span>
         
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2020-12-21 17:45:07'>2020-12-26 09:43</time>
+            Created At : <time class="date" title='Updated At: 2021-01-12 10:57:37'>2021-01-04 14:44</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:23</span>
+        <span>Count:2.3k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -380,7 +397,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#404-Not-Found%EF%BC%9A%E8%AF%A5%E9%A1%B5%E6%97%A0%E6%B3%95%E6%98%BE%E7%A4%BA"><span class="toc-text">404 Not Found：该页无法显示</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Windows%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90"><span class="toc-text">Windows日志分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%85%E5%8A%A9%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7"><span class="toc-text">辅助分析工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E7%AD%96%E7%95%A5%E8%AE%BE%E7%BD%AE"><span class="toc-text">本地策略设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E5%86%8C%E8%A1%A8"><span class="toc-text">注册表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%96%B9%E5%BC%8F"><span class="toc-text">其他方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90"><span class="toc-text">Linux日志分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E6%97%A5%E5%BF%97%E6%8C%87%E4%BB%A4"><span class="toc-text">常用日志指令</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -396,7 +413,301 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="404-Not-Found：该页无法显示"><a href="#404-Not-Found：该页无法显示" class="headerlink" title="404 Not Found：该页无法显示"></a>404 Not Found：该页无法显示</h2><p><strong>很抱歉，您所访问的地址并不存在</strong></p>
+        <h2 id="Windows日志分析"><a href="#Windows日志分析" class="headerlink" title="Windows日志分析"></a>Windows日志分析</h2><p>重要的事件ID和登录类型情况。</p>
+<table>
+<thead>
+<tr>
+<th>Event ID(2000/XP/2003)</th>
+<th>Event ID(Vista/7/8/2008/2012)</th>
+<th>描述</th>
+<th>日志名称</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>528</td>
+<td>4624</td>
+<td>成功登录</td>
+<td>Security</td>
+</tr>
+<tr>
+<td>529</td>
+<td>4625</td>
+<td>失败登录</td>
+<td>Security</td>
+</tr>
+<tr>
+<td>680</td>
+<td>4776</td>
+<td>成功/失败的账户认证</td>
+<td>Security</td>
+</tr>
+<tr>
+<td>624</td>
+<td>4720</td>
+<td>创建用户</td>
+<td>Security</td>
+</tr>
+<tr>
+<td>636</td>
+<td>4732</td>
+<td>添加用户到启用安全性的本地组中</td>
+<td>Security</td>
+</tr>
+<tr>
+<td>632</td>
+<td>4728</td>
+<td>添加用户到启用安全性的全局组中</td>
+<td>Security</td>
+</tr>
+<tr>
+<td>2934</td>
+<td>7030</td>
+<td>服务创建错误</td>
+<td>System</td>
+</tr>
+<tr>
+<td>2944</td>
+<td>7040</td>
+<td>IPSEC服务服务的启动类型已从禁用更改为自动启动</td>
+<td>System</td>
+</tr>
+<tr>
+<td>2949</td>
+<td>7045</td>
+<td>服务创建</td>
+<td>System</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>登录类型</th>
+<th>描述</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2</td>
+<td>交互式登录（Interactive）</td>
+<td>用户在本地进行登录</td>
+</tr>
+<tr>
+<td>3</td>
+<td>网络（Network）</td>
+<td>常见的情况就是连接到共享文件夹或共享打印机时，如SMB爆破——蠕虫病毒</td>
+</tr>
+<tr>
+<td>4</td>
+<td>批处理（Batch）</td>
+<td>通常表明某计划任务启动</td>
+</tr>
+<tr>
+<td>5</td>
+<td>服务（Service）</td>
+<td>每种服务都被配置在某个特定的用户账号下运行</td>
+</tr>
+<tr>
+<td>7</td>
+<td>解锁（Unlock）</td>
+<td>屏保解锁。</td>
+</tr>
+<tr>
+<td>8</td>
+<td>网络明文（NetworkCleartext）</td>
+<td>登录的密码在网络上是通过明文传输的，如FTP</td>
+</tr>
+<tr>
+<td>9</td>
+<td>新凭证（NewCredentials）</td>
+<td>使用带/Netonly参数的RUNAS命令运行一个程序</td>
+</tr>
+<tr>
+<td>10</td>
+<td>远程交互（RemoteInteractive）</td>
+<td>通过终端服务、远程桌面或远程协助访问计算机，如RDP爆破——勒索病毒</td>
+</tr>
+<tr>
+<td>11</td>
+<td>缓存交互（CachedInteractive）</td>
+<td>以一个域用户登录而又没有域控制器可用</td>
+</tr>
+</tbody></table>
+<p><strong>重要的事件 ID</strong>（安全日志，Security.evtx）</p>
+<ul>
+<li>4624：账户成功登录</li>
+<li>4648：使用明文凭证尝试登录</li>
+<li>4778：重新连接到一台 Windows 主机的会话</li>
+<li>4779：断开到一台 Windows 主机的会话</li>
+</ul>
+<p><strong>远程连接日志</strong></p>
+<p>（<code>应用程序和服务日志</code>-&gt;<code>Microsoft</code>-&gt;<code>Windows</code>-&gt;-<code>TerminalServices</code>-&gt;<code>RemoteConnectionManager</code>-&gt;<code>Operational</code>），重要事件 ID 和含义：</p>
+<ul>
+<li>1149：用户认证成功</li>
+<li>21：远程桌面服务：会话登录成功</li>
+<li>24：远程桌面服务：会话已断开连接</li>
+<li>25：远程桌面服务：会话重新连接成功</li>
+</ul>
+<p>远程连接日志关注 RemoteInteractive（10） 和CachedRemoteInteractive（12）表明使用了 RDP ，因为这些登录类型专用于RDP使用。</p>
+<p><strong>计划任务关注的事件 ID</strong></p>
+<ul>
+<li>4624：账户成功登录</li>
+</ul>
+<p>计划任务事件 Microsoft-Windows-TaskScheduler/Operational.evtx，计划任务 ID 含义：</p>
+<ul>
+<li>100：任务已开始</li>
+<li>102：任务完成</li>
+<li>106：已注册任务（关注点）</li>
+<li>107：在调度程序上触发任务</li>
+<li>110：用户触发的任务</li>
+<li>129：创建任务流程（推出）</li>
+<li>140：任务已更新</li>
+<li>141：任务已删除</li>
+<li>200：运行计划任务</li>
+<li>325：启动请求排队</li>
+</ul>
+<pre><code>更多的依赖windows系统本身的日志记录 
+审核登录的记录 
+事件id 4798 LogonUI.exe
+事件id 4628 Svchost.exe 生成4624
+事件id 4624 User32.exe 审核成功
+事件id 4625 User32.exe 审核失败
+
+Setup 
+补丁安全记录
+
+系统 
+服务记录 事件id 7045安装服务
+
+ForwardedEvents 未知
+
+Windows Vista/7/10
+Application、Security、System
+%SystemRoot%\System32\Winevt\Logs *.evtx
+
+Windows 2000/Server2003/Windows XP
+(早期系统xp及以前)Application、Security、System
+%systemroot%\system32\config *.evt格式</code></pre>
+<h3 id="辅助分析工具"><a href="#辅助分析工具" class="headerlink" title="辅助分析工具"></a>辅助分析工具</h3><p><strong>LogParser 命令行工具</strong></p>
+<p><strong>Log Parser Lizard UI工具</strong></p>
+<h3 id="本地策略设置"><a href="#本地策略设置" class="headerlink" title="本地策略设置"></a>本地策略设置</h3><p>Windows本地安全策略配置，win10默认情况只开启了不允许SAM帐户的匿名枚举。</p>
+<p><img src="%E5%AE%89%E5%85%A8%E9%80%89%E9%A1%B9%E7%AD%96%E7%95%A5.png" alt="安全选项策略"></p>
+<p>相关策略设置情况如下所示。</p>
+<pre><code> 网络访问.不允许SAM帐户的匿名枚举 启用
+ 网络访问.可匿名的共享 将后面的值删除
+ 网络访问.可匿名的命名管道 将后面的值删除
+ 网络访问.可远程访问的注册表路径 将后面的值删除
+ 网络访问.可远程访问的注册表的子路径 将后面的值删除
+ 网络访问.限制匿名访问命名管道和共享 启用</code></pre>
+<p>Windows审核策略默认情况下未开启。</p>
+<p><img src="%E5%AE%A1%E6%A0%B8%E7%AD%96%E7%95%A5.png" alt="审核策略"></p>
+<p>相关策略设置情况如下所示。</p>
+<pre><code>审核系统登陆事件 成功，失败 
+审核帐户管理 成功，失败 
+审核登陆事件 成功，失败 
+审核对象访问 成功 
+审核策略更改 成功，失败 
+审核特权使用 成功，失败 
+审核系统事件 成功，失败 </code></pre>
+<h3 id="注册表"><a href="#注册表" class="headerlink" title="注册表"></a>注册表</h3><p>修改注册表增加安全性。</p>
+<p>禁止默认共享<br>[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\lanmanserver\parameters ] 新建DOWRD“AutoShareServer”设置为“0” </p>
+<p>修改默认的TTL值<br>[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters]新建DOWRD值为DefaultTTL </p>
+<p>阻止ICMP重定向报文<br>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\ParametersEnableICMPRedirects REG_DWORD 0x0(默认值为0x1)</p>
+<p>以Svchost方式实现的开启服务启动。</p>
+<p>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SvcHost 的netsvcs包含所有以Svchost启动的服务。</p>
+<h3 id="其他方式"><a href="#其他方式" class="headerlink" title="其他方式"></a>其他方式</h3><p>1.安装影子系统</p>
+<p>2.采用 EFS 加密硬盘以保护数据</p>
+<h2 id="Linux日志分析"><a href="#Linux日志分析" class="headerlink" title="Linux日志分析"></a>Linux日志分析</h2><p>通过日志和计划任务可了解linux系统的最新情况。</p>
+<pre><code>通过.bash_history查看帐号执行过的历史命令，主要分析是否有账户执行过恶意操作。
+1、root的历史命令：histroy
+2、其他账号：打开/home各帐号目录下的.bash_history，查看普通帐号的历史命令
+
+1、启动项文件：
+检查方法：
+    重点关注以下目录中是否存在启动项：
+    /etc/rc.local 、/etc/rc.d/rc[0~6].d 、/etc/init.d/
+    可用命令查看：ls -alt /etc/init.d/
+
+2、计划任务，重点关注以下目录中是否存在恶意脚本：
+/var/spool/cron/*
+/etc/crontab
+/etc/cron.d/*
+/etc/cron.daily/*
+/etc/cron.hourly/*
+/etc/cron.monthly/*
+/etc/cron.weekly/
+
+3、查询当前服务：
+检查方法：
+    chkconfig --list 查看服务自启动状态，可以看到所有的RPM包安装的服务
+    ps aux | grep crond 查看当前服务
+1、查找可疑目录及文件
+检查方法：
+a、敏感目录的文件分析：[类 /tmp 目录，命令目录/usr/bin    /usr/sbin 等]
+    如使用命令 ls   –alt /tmp/ 查看 tmp 目录下的文件
+b、处置方法：确认后删除相关目录和文件。
+
+2、查找新增文件
+检查方法：
+a、find：在指定目录下查找文件
+    例如 find ./ -mtime 0 -name &quot;*.php&quot;（查找 24 小时内被修改的 php 文件）
+    -amin -n 查找n分钟以前被访问过的所有文件。
+    -atime -n 查找n天以前被访问过的所有文件。
+    -cmin -n 查找n分钟以前文件状态被修改过的所有文件。
+    -ctime -n 查找n天以前文件状态被修改过的所有文件。
+    -mmin -n 查找n分钟以前文件内容被修改过的所有文件。
+    -mtime -n 查找n天以前文件内容被修改过的所有文件。
+
+b、处置方法：确认后删除相关目录和文件。
+
+3、特殊权限的文件查看
+检查方法：
+a、查找 777 权限的jsp文件 ➜➜➜ find / -name *.jsp -perm 777
+b、查找所有777权限的文件 ➜➜➜ find /  -perm 777
+linux系统日志一般存放在/var/log/目录下。
+
+/var/log/messages
+记录Linux内核消息及各种应用程序的公共日志信息，包括启动、IO错误、网络错误、程序故障等。
+对于未使用独立日志文件的应用程序或服务，一般都可以从该文件获得相关的事件记录信息。
+
+/var/log.boot.log：记录一些开关机启动的一些服务显示的启动或者关闭的信息。
+
+/var/log/cron：记录crond计划任务产生的事件消息。
+
+/var/log/dmesg：记录Linux系统在引导过程中的各种事件信息。
+
+/var/log/maillog：记录进入或发出系统的电子邮件活动。
+
+/var/log/lastlog：最近几次成功登录事件和最后一次不成功登录事件。
+可以使用lastlog命令检查某特定用户上次登录的时间。如果一个用户从未登录过，lastlog显示Never logged。注意需要以root身份运行该命令。通过lastlog命令查看
+
+/var/log/rpmpkgs：记录系统中安装各rpm包列表信息。
+
+/var/log/secure：记录用户登录认证过程中的事件信息。
+secure是应急中最常用的文件，记录用户登录认证过程中的事件信息。
+如POP3、ssh、telnet、ftp等相关记录，从日志中可看出系统服务是否遭受到安全威胁。
+
+/var/log/httpd 目录    Apache HTTP 服务日志。
+
+/var/log/xferlog: 记录ftp向服务器传输/拷贝什么文件。
+
+/var/log/wtmp：记录每个用户登录、注销及系统启动和停机事件。
+
+wtmp日志记录了用户的登录、退出、重启等情况。
+判断攻击者是否已经登录服务器通过last命令查看。
+
+/var/log/utmp：记录当前登录的每个用户的详细信息
+
+RedHat /etc/syslog.conf文件中加上：*.warning /var/log/syslog </code></pre>
+<h3 id="常用日志指令"><a href="#常用日志指令" class="headerlink" title="常用日志指令"></a>常用日志指令</h3><pre><code>last：这个命令就是将/var/log/wtmp文件格式化输出。 
+lastb：这个命令就是将/var/log/btmp文件格式化输出。 
+lastlog：这个命令就是将/var/log/lastlog文件格式化输出。 
+who：这个命令就是将/var/log/utmp文件格式化输出
+ps -aux
+nestat -ano
+losf -p pid
+lsof -i pid 
+chkconfig –list/systemctl list-units –type=service //自启动
+head/tail 查看头/尾部分数据</code></pre>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以通过评论或者QQ972476182联系我。 </span>

@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>404 | Risks&#39;s blog</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="404 | Risks&#39;s blog">
+  <title>DLL相关技术 | Risks&#39;s blog</title>
+  <meta name="keywords" content=" DLL调试 , DLL劫持 , DLL导出函数 ">
+  <meta name="description" content="DLL相关技术 | Risks&#39;s blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="404 Not Found：该页无法显示很抱歉，您所访问的地址并不存在">
 <meta property="og:type" content="website">
@@ -333,24 +333,43 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+        <article id="post-DLL相关技术" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">404</h1>
+        <h1 class="article-title">DLL相关技术</h1>
     
     <div class="article-meta">
         
         
         
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="DLL技术">DLL技术</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color1">DLL调试</a>
+            
+            <a class="color1">DLL劫持</a>
+            
+            <a class="color3">DLL导出函数</a>
+            
+        </span>
         
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2020-12-21 17:45:07'>2020-12-26 09:43</time>
+            Created At : <time class="date" title='Updated At: 2021-01-25 11:38:43'>2021-01-19 15:46</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:23</span>
+        <span>Count:1.4k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -380,7 +399,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#404-Not-Found%EF%BC%9A%E8%AF%A5%E9%A1%B5%E6%97%A0%E6%B3%95%E6%98%BE%E7%A4%BA"><span class="toc-text">404 Not Found：该页无法显示</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#VS%E5%AF%BC%E5%87%BA%E5%87%BD%E6%95%B0"><span class="toc-text">VS导出函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8def%E6%96%87%E4%BB%B6"><span class="toc-text">使用def文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8extern"><span class="toc-text">使用extern</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DLL%E5%8A%AB%E6%8C%81"><span class="toc-text">DLL劫持</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DLL-SIDE-LOADING"><span class="toc-text">DLL SIDE-LOADING</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1DLL%E8%B0%83%E8%AF%95"><span class="toc-text">服务DLL调试</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -396,7 +415,97 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="404-Not-Found：该页无法显示"><a href="#404-Not-Found：该页无法显示" class="headerlink" title="404 Not Found：该页无法显示"></a>404 Not Found：该页无法显示</h2><p><strong>很抱歉，您所访问的地址并不存在</strong></p>
+        <h2 id="VS导出函数"><a href="#VS导出函数" class="headerlink" title="VS导出函数"></a>VS导出函数</h2><h3 id="使用def文件"><a href="#使用def文件" class="headerlink" title="使用def文件"></a>使用def文件</h3><pre><code>LIBRARY   
+
+EXPORTS
+    name @numer</code></pre>
+<h3 id="使用extern"><a href="#使用extern" class="headerlink" title="使用extern"></a>使用extern</h3><pre><code>extern &quot;C&quot;表示以C函数来调用而不是C++
+.c调用c函数
+#ifdef __cplusplus
+extern &quot;C&quot; &#123;
+#endif
+/*
+ *.................................
+ * do something here
+ *.................................
+*/
+#ifdef __cplusplus
+&#125;
+#endif
+
+.cpp调用c函数
+extern &quot;C&quot;&#123;
+/*
+ *.................................
+ * do something here
+ *.................................
+*/
+&#125;
+</code></pre>
+<h2 id="DLL劫持"><a href="#DLL劫持" class="headerlink" title="DLL劫持"></a>DLL劫持</h2><p>​        dll搜索劫持技术是一种简单的dll注入技术，他利用windows加载dll目录的优先级来加载dll。他不需要通过修改注册表或者修改二进制文件的前提下注入dll的。下面是windows加载dll的默认搜索顺序：</p>
+<pre><code>1.加载应用程序的目录
+2.当前目录【经常利用到】
+3.系统目录（../windows/system32）
+4.16位子系统目录（../windows/system）
+5.windows目录（../windows）
+6.PATH环境变量列举的目录
+说明：为了安全和加载速度，windows会在HKML\System\CurrentSet\SessionManger\SafeDll\SafeDllSearchMode下创建键值，系统会优先加载这些已知的dll(第一位)
+      我们在通过两个方面来进行劫持：
+1.通过在上述注册表中添加恶意dll路径的键值，这样使得恶意dll优先注入到进程空间（这个恶意dll需要和系统dll同名）
+2.在加载系统dll之前加载，有权访问文件系统的攻击者可能会将恶意ntshrui.dll放在C：\ Windows目录中。该DLL通常驻留在System32文件夹中。进程explorer.exe也驻留在c:\Windows中，一旦尝试从System32文件夹中加载ntshrui.dll，实际上会由于优先搜索顺序而加载由攻击者提供的DLL。由于攻击者已将其恶意ntshrui.dll放入与加载explorer.exe进程相同的目录中，因此将首先找到攻击者提供的DLL，从而加载代替合法DLL。由于explorer.exe在引导周期内被加载，攻击者的恶意软件被保证执行。【不上书上说的../windows比系统目录优先搜索，而是当前目录比系统目录被优先搜索】
+如果启用windows的Dll的安全检查，情况可能会大有改观。
+启用&quot;安全DLL查找模式&quot;时，查找顺序如下：
+1.应用程序所在目录；
+2.系统目录。GetSystemDirectory返回的目录，通常是系统盘\Windows\System32；
+3.16位系统目录
+4.Windows目录。GetWindowsDirectory返回的目录，通常是系统盘\Windows；
+5.当前目录。GetCurrentDirectory返回的目录；
+6.环境变量PATH中所有目录。</code></pre>
+<h2 id="DLL-SIDE-LOADING"><a href="#DLL-SIDE-LOADING" class="headerlink" title="DLL SIDE-LOADING"></a>DLL SIDE-LOADING</h2><pre><code>APT组织常用，即所谓白+黑技术</code></pre>
+<h2 id="服务DLL调试"><a href="#服务DLL调试" class="headerlink" title="服务DLL调试"></a>服务DLL调试</h2><p><strong>第一种推荐的方式 修改OEP。</strong></p>
+<p>原始的函数信息</p>
+<p>5FF75670 &gt;  55              push ebp<br>5FF75671    8BEC            mov ebp,esp<br>5FF75673    83EC 3C         sub esp,3C<br>5FF75676    A1 0880F85F     mov eax,dword ptr ds:[5FF88008]</p>
+<p><img src="%E5%8E%9F%E5%A7%8BOEP.png" alt="原始OEP"></p>
+<p>修改后的函数信息</p>
+<p>原始操作字节码 EB FE 90</p>
+<p>5FF75670 &gt;- EB FE           jmp short Microsof.ServiceMain<br>5FF75672    90              nop<br>5FF75673    83EC 3C         sub esp,3C<br>5FF75676    A1 0880F85F     mov eax,dword ptr ds:[5FF88008]</p>
+<p><img src="%E5%8E%9F%E5%A7%8BOEP.png" alt="原始OEP">过调试器附加相应的进程来完成相关调试。</p>
+<p>不太好使容易出现卡死的状态，导致系统不稳定。</p>
+<p><strong>第二种推荐的方式，利用映像劫持</strong></p>
+<p>主要涉及修改注册表相关信息和配置修改问题</p>
+<p>首先开启服务的交互选项，勾选“允许服务与桌面交互”的选项。</p>
+<p><img src="%E5%85%81%E8%AE%B8%E6%9C%8D%E5%8A%A1%E4%BA%A4%E4%BA%92.png" alt="允许服务交互"></p>
+<p>在服务管理器中启动Interactive Services Detection，默认是关闭的。</p>
+<p><img src="%E9%BB%98%E8%AE%A4%E5%85%B3%E9%97%AD.png" alt="默认关闭"></p>
+<p>修改Interactive Services Detection服务的启动方式并启动该服务。</p>
+<p><img src="%E5%BC%80%E5%90%AF%E4%BA%A4%E4%BA%92%E9%80%9A%E7%9F%A5%E6%9C%8D%E5%8A%A1.png" alt="开启交互通知服务"></p>
+<p>通过服务定位到注册表位置</p>
+<p>修改ImagePath的svchost为scvhost(多么鸡贼的想法，我怎么就没想到呢~，失误，失误)，这样可以防止意外重启导致计算机无法正常开机，并且由于scvhost服务众多，容易出现错误调试的情况，修改名字后可以定位到唯一的服务更加准确，记得在修改完成后复制一个svchost并改名为scvhost。</p>
+<p><img src="%E5%BC%80%E5%90%AF%E4%BA%A4%E4%BA%92%E9%80%9A%E7%9F%A5%E6%9C%8D%E5%8A%A1.png" alt="开启交互通知服务"></p>
+<p>主键 HKEY_LOCAL_MACHINE</p>
+<p>子键 SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options</p>
+<p>添加新的子项scvhost.exe 创建字符串数值debugger 设置调试器的信息</p>
+<p><img src="%E6%98%A0%E5%83%8F%E5%8A%AB%E6%8C%81%E8%AE%BE%E7%BD%AE.png" alt="映像劫持设置"></p>
+<p>点击启动服务时，弹出交互式提示，点击查看消息即可。</p>
+<p><img src="%E6%98%A0%E5%83%8F%E5%8A%AB%E6%8C%81%E8%AE%BE%E7%BD%AE.png" alt="映像劫持设置"></p>
+<p>成功进入到交互式调试，但是这样存在一个问题，调试时截图不方便并且调试时界面有些过于丑陋(嫌弃这种风格)。</p>
+<p><img src="%E8%BF%9B%E5%85%A5%E4%BA%A4%E4%BA%92%E8%B0%83%E8%AF%95%E7%8A%B6%E6%80%81.png" alt="进入交互调试状态"></p>
+<p>并且由于有些服务会检测父进程是否是Services服务，交互式调试父进程是调试器本身，所以在调试某些服务会出现一些问题，比如wannamine4.0服务就存在这样的校验。</p>
+<p><strong>于是我想到了把映像劫持使用的修改名字的方法用到修改OEP上面，并且想到了解决卡顿的问题(进程启动后暂停进程即可，我可真是个小机灵鬼)。</strong></p>
+<p>首先还是先完成服务的修改，这样便于更清楚的看到相关的进程情况。</p>
+<p><img src="%E4%BF%AE%E6%94%B9svchost.png" alt="修改svchost"></p>
+<p>启动服务，通过procexp进程查看器，对该进程进行挂起操作。</p>
+<p><img src="%E6%8C%82%E8%B5%B7%E8%BF%9B%E7%A8%8B.png" alt="挂起进程"></p>
+<p>通过调试器附加，可以清楚地看到scvhost.exe不同于svchost.exe</p>
+<p><img src="%E6%8C%82%E8%B5%B7%E8%BF%9B%E7%A8%8B.png" alt="挂起进程"></p>
+<p>内存搜索EB FE 90，定位到导出函数的位置。</p>
+<p><img src="%E6%8C%82%E8%B5%B7%E8%BF%9B%E7%A8%8B.png" alt="挂起进程"></p>
+<p>找到了之前修改的函数头，通过该地址跳转到对应的内存区域。</p>
+<p><img src="%E5%9C%B0%E5%9D%80%E8%B7%B3%E8%BD%AC.png" alt="地址跳转"></p>
+<p><strong>修改为原始的OEP头，即恢复EB FE 90为55 8B EC即可，下好断点恢复线程跑起来就可以尽情的调试服务代码了，别忘记了恢复线程因为之前暂停了线程的执行。</strong></p>
+<p><img src="%E6%81%A2%E5%A4%8D%E5%8E%9F%E5%A7%8BOEP.png" alt="恢复原始OEP"></p>
+<p>尽管最后还是弹出了服务无法启动的提示框，但是并不影响到服务的调试。</p>
+<p><img src="%E5%9C%B0%E5%9D%80%E8%B7%B3%E8%BD%AC.png" alt="地址跳转"></p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以通过评论或者QQ972476182联系我。 </span>

