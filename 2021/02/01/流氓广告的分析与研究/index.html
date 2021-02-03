@@ -207,7 +207,7 @@
     <div><a class="about  hasFriend  site_url"  href="/about">About</a><a style="width: 50%"  class="friends">Friends</a></div>
 </div>
 <input type="hidden" id="yelog_site_posts_number" value="15">
-<input type="hidden" id="yelog_site_word_count" value="21.3k">
+<input type="hidden" id="yelog_site_word_count" value="21.4k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -507,7 +507,7 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2021-02-01 20:20:05'>2021-02-01 19:54</time>
+            Created At : <time class="date" title='Updated At: 2021-02-03 19:51:59'>2021-02-01 19:54</time>
         
     </div>
     <div class="article-meta">
@@ -542,7 +542,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90"><span class="toc-text">详细分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#XinSu%E5%88%86%E6%9E%90"><span class="toc-text">XinSu分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Loruly%E8%BF%9B%E7%A8%8B%E5%88%86%E6%9E%90"><span class="toc-text">Loruly进程分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Furtler%E8%BF%9B%E7%A8%8B"><span class="toc-text">Furtler进程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-text">小结</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UpdateChecker%E5%88%86%E6%9E%90"><span class="toc-text">UpdateChecker分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#UpdateChecker%E8%BF%9B%E7%A8%8B"><span class="toc-text">UpdateChecker进程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93-1"><span class="toc-text">小结</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%84%E7%BD%AE%E5%BB%BA%E8%AE%AE"><span class="toc-text">处置建议</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90"><span class="toc-text">一、详细分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%88%E4%B8%80-XinSu%E5%88%86%E6%9E%90"><span class="toc-text">（一)XinSu分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81Loruly%E8%BF%9B%E7%A8%8B%E5%88%86%E6%9E%90"><span class="toc-text">1、Loruly进程分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81Furtler%E8%BF%9B%E7%A8%8B"><span class="toc-text">2、Furtler进程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E3%80%81%E5%B0%8F%E7%BB%93"><span class="toc-text">3、小结</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%88%E4%BA%8C-UpdateChecker%E5%88%86%E6%9E%90"><span class="toc-text">（二) UpdateChecker分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81UpdateChecker%E8%BF%9B%E7%A8%8B"><span class="toc-text">1、UpdateChecker进程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E5%B0%8F%E7%BB%93"><span class="toc-text">2、小结</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%A4%84%E7%BD%AE%E5%BB%BA%E8%AE%AE"><span class="toc-text">二、处置建议</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -560,17 +560,17 @@
       
         <p>大家使用电脑时，装机必备软件肯定少不了压缩工具，但使用压缩软件时，你们有没有发现他们都有同样的毛病？可恶的流氓广告！你是否和笔者一样有着以下这些烦恼：电脑开机时，迎接你的总是任务栏上莫名弹出的各种广告；经常发现电脑桌面上不知何时悄无声息的出现了各种图标；或者更令人爆炸的是玩游戏或者全屏投影的时候弹窗广告强行把你切回桌面等等。而这些其实都是由于商业公司往往会瞄准一些存在开源方案的软件，一拥而上，用开源代码改造出带恶意弹窗推广的流氓软件。</p>
 <p>流氓软件是介于病毒和正规软件之间的软件，多半都是在用户不知情的情况下载安装的。“流氓软件”不仅会影响我们的日常办公，而且还会劫持你的电脑，篡改你的网站主页，甚至还会收集、追踪你的个人信息进行利用和推广；让人感到无比恶心的同时有的还拿它没辙。很不幸，压缩软件正是流氓软件中的典型之一。目前，流氓广告推广成为多数用户的烦恼，通过对压缩类流氓广告的样本分析发现，这些让人束手无策又抓狂的弹窗广告已成为日常。</p>
-<h2 id="详细分析"><a href="#详细分析" class="headerlink" title="详细分析"></a>详细分析</h2><p>根据最近捕获的病毒样本数据统计，感染量前50的病毒中流氓软件占比较大，而压缩软件正是流氓软件中的典型之一，所以本文将带大家一起分析两款典型的带有流氓广告的压缩软件，分别是XinSu安装包（1.0.5.20331版本）和KuaiZi(快压)检查更新程序UpdateChecker（1.0.5.1版本）。</p>
+<h2 id="一、详细分析"><a href="#一、详细分析" class="headerlink" title="一、详细分析"></a>一、详细分析</h2><p>根据最近捕获的病毒样本数据统计，感染量前50的病毒中流氓软件占比较大，而压缩软件正是流氓软件中的典型之一，所以本文将带大家一起分析两款典型的带有流氓广告的压缩软件，分别是XinSu安装包（1.0.5.20331版本）和KuaiZi(快压)检查更新程序UpdateChecker（1.0.5.1版本）。</p>
 <p>XinSu安装包是最近非常活跃的带有流氓广告的软件之一，是压缩软件新速压缩的安装包，该软件被众多使用者指出在开机之后会弹出大量低俗的弹窗广告，并且安全研究者发现该软件中内置了后门程序用来收集用户浏览器历史记录等信息。</p>
 <p>而UpdateChecker程序是压缩软件快压的检测更新程序，版本1.0.5.1。该软件负责快压中的广告弹窗。快压程序安装时，会在安装目录的x86目录下释放一个UpdateChecker.exe的流氓软件，文件描述为“快压检查更新程序”。但实际上该程序运行时会下载并执行对应的广告程序，导致出现大量的广告弹窗。</p>
 <p>下面就对这两种带有流氓广告的压缩软件进行分析。</p>
-<h3 id="XinSu分析"><a href="#XinSu分析" class="headerlink" title="XinSu分析"></a>XinSu分析</h3><p>首先，第一步是创建服务，并设置其为默认解压软件；然后，通过分析该安装包各个安装进程之间的层层关系，获得关系示意图如下图所示：</p>
+<h3 id="（一-XinSu分析"><a href="#（一-XinSu分析" class="headerlink" title="（一)XinSu分析"></a>（一)XinSu分析</h3><p>首先，第一步是创建服务，并设置其为默认解压软件；然后，通过分析该安装包各个安装进程之间的层层关系，获得关系示意图如下图所示：</p>
 <p><img src="/img/%E6%B5%81%E6%B0%93%E5%B9%BF%E5%91%8A%E7%9A%84%E5%88%86%E6%9E%90%E4%B8%8E%E7%A0%94%E7%A9%B6/clip_image002.jpg"></p>
 <p>其中，服务进程Secat通过参数启动了Yematou.exe进程；通过动态调试分析能得到，Yematou通过CreateProcessW来创建子进程Loruly；Yematou随后退出，也导致了Loruly没有父进程；Loruly通过参数启动了Furtler、Xsmn、Xstp等进程，自此，进程间的关系就弄清楚了。</p>
 <p>通过对Loruly的分析，发现了启动进程的参数情况:</p>
 <p><img src="/img/%E6%B5%81%E6%B0%93%E5%B9%BF%E5%91%8A%E7%9A%84%E5%88%86%E6%9E%90%E4%B8%8E%E7%A0%94%E7%A9%B6/clip_image004.jpg"></p>
-<p>通过已有的分析情况来看，新速压缩中的后门程序主要分为两个部分，云控主程序Loruly.exe和加载信息收集云控模块Furtler.exe（详细情况可参考链接<a target="_blank" rel="noopener" href="https://www.huorong.cn/info/1592489908487.html">火绒</a>）。所以在XinSu安装包的所有进程中Loruly和Furtler相对更为重要，接下来将这两个模块单独提出来做进一步分析。</p>
-<h4 id="Loruly进程分析"><a href="#Loruly进程分析" class="headerlink" title="Loruly进程分析"></a>Loruly进程分析</h4><p>（1）使用wireshark工具连接106.75.97.222的80端口，抓取报文如下：</p>
+<p>通过已有的分析情况来看，新速压缩中的后门程序主要分为两个部分，云控主程序Loruly.exe和加载信息收集云控模块Furtler.exe（详细情况可参考链接 <a target="_blank" rel="noopener" href="https://www.huorong.cn/info/1592489908487.html">火绒</a>）。所以在XinSu安装包的所有进程中Loruly和Furtler相对更为重要，接下来将这两个模块单独提出来做进一步分析。</p>
+<h4 id="1、Loruly进程分析"><a href="#1、Loruly进程分析" class="headerlink" title="1、Loruly进程分析"></a>1、Loruly进程分析</h4><p>（1）使用wireshark工具连接106.75.97.222的80端口，抓取报文如下：</p>
 <p><img src="/img/%E6%B5%81%E6%B0%93%E5%B9%BF%E5%91%8A%E7%9A%84%E5%88%86%E6%9E%90%E4%B8%8E%E7%A0%94%E7%A9%B6/clip_image006.jpg"></p>
 <p><img src="/img/%E6%B5%81%E6%B0%93%E5%B9%BF%E5%91%8A%E7%9A%84%E5%88%86%E6%9E%90%E4%B8%8E%E7%A0%94%E7%A9%B6/clip_image008.jpg"></p>
 <p>（2）然后连接58.216.21.226的80端口，抓取报文如下</p>
@@ -598,7 +598,7 @@
 <p><img src="/img/%E6%B5%81%E6%B0%93%E5%B9%BF%E5%91%8A%E7%9A%84%E5%88%86%E6%9E%90%E4%B8%8E%E7%A0%94%E7%A9%B6/clip_image032.gif" alt="image012.png"></p>
 <p>（13）带参启动Furtler进程，参数为xml的配置数据:</p>
 <p><img src="/img/%E6%B5%81%E6%B0%93%E5%B9%BF%E5%91%8A%E7%9A%84%E5%88%86%E6%9E%90%E4%B8%8E%E7%A0%94%E7%A9%B6/clip_image033.jpg"></p>
-<h4 id="Furtler进程"><a href="#Furtler进程" class="headerlink" title="Furtler进程"></a>Furtler进程</h4><p>（1）Furtler进程同样存在文件解密的操作，Furtler.exe会根据其参数中的网址去下载执行远程加密模块jp_zgzs.dll的“Run”导出函数。解密过程和Loruly采用同样的解密方式:</p>
+<h4 id="2、Furtler进程"><a href="#2、Furtler进程" class="headerlink" title="2、Furtler进程"></a>2、Furtler进程</h4><p>（1）Furtler进程同样存在文件解密的操作，Furtler.exe会根据其参数中的网址去下载执行远程加密模块jp_zgzs.dll的“Run”导出函数。解密过程和Loruly采用同样的解密方式:</p>
 <p><img src="/img/%E6%B5%81%E6%B0%93%E5%B9%BF%E5%91%8A%E7%9A%84%E5%88%86%E6%9E%90%E4%B8%8E%E7%A0%94%E7%A9%B6/clip_image035.jpg"></p>
 <p>（2）得到解压文件后发现是一个名为wp2_zgzs.dll，存在Run等相关导出函数:</p>
 <p><img src="/img/%E6%B5%81%E6%B0%93%E5%B9%BF%E5%91%8A%E7%9A%84%E5%88%86%E6%9E%90%E4%B8%8E%E7%A0%94%E7%A9%B6/clip_image037.jpg"></p>
@@ -607,16 +607,16 @@
 <p><img src="/img/%E6%B5%81%E6%B0%93%E5%B9%BF%E5%91%8A%E7%9A%84%E5%88%86%E6%9E%90%E4%B8%8E%E7%A0%94%E7%A9%B6/clip_image041.jpg"></p>
 <p>（4）eax的地址为Run的地址，用于调用Run函数:</p>
 <p><img src="/img/%E6%B5%81%E6%B0%93%E5%B9%BF%E5%91%8A%E7%9A%84%E5%88%86%E6%9E%90%E4%B8%8E%E7%A0%94%E7%A9%B6/clip_image043.jpg"></p>
-<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><p>在%appdata%\LocalLow目录下发现了关于gif文件和xml文件等特殊文件，目录情况如下所示，其中包含了下载链接提及的syt.gif、zsw.gif和zsw2.gif：</p>
+<h4 id="3、小结"><a href="#3、小结" class="headerlink" title="3、小结"></a>3、小结</h4><p>在%appdata%\LocalLow目录下发现了关于gif文件和xml文件等特殊文件，目录情况如下所示，其中包含了下载链接提及的syt.gif、zsw.gif和zsw2.gif：</p>
 <p><img src="/img/%E6%B5%81%E6%B0%93%E5%B9%BF%E5%91%8A%E7%9A%84%E5%88%86%E6%9E%90%E4%B8%8E%E7%A0%94%E7%A9%B6/clip_image045.jpg"></p>
 <p><img src="/img/%E6%B5%81%E6%B0%93%E5%B9%BF%E5%91%8A%E7%9A%84%E5%88%86%E6%9E%90%E4%B8%8E%E7%A0%94%E7%A9%B6/clip_image047.jpg"></p>
 <p><img src="/img/%E6%B5%81%E6%B0%93%E5%B9%BF%E5%91%8A%E7%9A%84%E5%88%86%E6%9E%90%E4%B8%8E%E7%A0%94%E7%A9%B6/clip_image049.jpg"></p>
 <p>如果大家想了解XinSu压缩更多分析结果可参考：<a target="_blank" rel="noopener" href="https://www.huorong.cn/info/1592489908487.html">https://www.huorong.cn/info/1592489908487.html</a></p>
-<h3 id="UpdateChecker分析"><a href="#UpdateChecker分析" class="headerlink" title="UpdateChecker分析"></a>UpdateChecker分析</h3><p>该程序为快压的检测更新程序，版本1.0.5.1。UpdateChecker.exe的文件描述为“快压检查更新程序”，文件属性，如下图所示：</p>
+<h3 id="（二-UpdateChecker分析"><a href="#（二-UpdateChecker分析" class="headerlink" title="（二) UpdateChecker分析"></a>（二) UpdateChecker分析</h3><p>该程序为快压的检测更新程序，版本1.0.5.1。UpdateChecker.exe的文件描述为“快压检查更新程序”，文件属性，如下图所示：</p>
 <p><img src="/img/%E6%B5%81%E6%B0%93%E5%B9%BF%E5%91%8A%E7%9A%84%E5%88%86%E6%9E%90%E4%B8%8E%E7%A0%94%E7%A9%B6/clip_image051.jpg"></p>
 <p>经过对其数字签名的校验，发现该数字签名真实并有效，同时使用了网上已有的验证签名的方法进行验证：</p>
 <p><img src="/img/%E6%B5%81%E6%B0%93%E5%B9%BF%E5%91%8A%E7%9A%84%E5%88%86%E6%9E%90%E4%B8%8E%E7%A0%94%E7%A9%B6/clip_image053.jpg"></p>
-<h4 id="UpdateChecker进程"><a href="#UpdateChecker进程" class="headerlink" title="UpdateChecker进程"></a>UpdateChecker进程</h4><p>（1）通过进程树可以发现，UpdateChecker启动了一个广告进程，并弹出了相关广告提示框：</p>
+<h4 id="1、UpdateChecker进程"><a href="#1、UpdateChecker进程" class="headerlink" title="1、UpdateChecker进程"></a>1、UpdateChecker进程</h4><p>（1）通过进程树可以发现，UpdateChecker启动了一个广告进程，并弹出了相关广告提示框：</p>
 <p><img src="/img/%E6%B5%81%E6%B0%93%E5%B9%BF%E5%91%8A%E7%9A%84%E5%88%86%E6%9E%90%E4%B8%8E%E7%A0%94%E7%A9%B6/clip_image055.jpg"></p>
 <p>（2）通过对UpdateChecker进行调试分析发现，UpdateChecker会下载文件并保存在本地，主要有%appdata%\kuaiya和%appdata%\kuaizip两个目录，包含文件详情如下图所示：</p>
 <p><img src="/img/%E6%B5%81%E6%B0%93%E5%B9%BF%E5%91%8A%E7%9A%84%E5%88%86%E6%9E%90%E4%B8%8E%E7%A0%94%E7%A9%B6/clip_image057.jpg"></p>
@@ -639,10 +639,10 @@
 <p>（10）其余xml大多是用来配置下载文件的配置和其他相关信息，这里以kuaiyaminixktt为例子，我们看一下xml的具体内容：</p>
 <p><img src="/img/%E6%B5%81%E6%B0%93%E5%B9%BF%E5%91%8A%E7%9A%84%E5%88%86%E6%9E%90%E4%B8%8E%E7%A0%94%E7%A9%B6/clip_image077.jpg"></p>
 <p>（11）下载完对应的文件并弹出广告窗口之后，UpdateChecker进程退出，自此UpdateChecker的分析就到此为止。</p>
-<h4 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h4><p>相对于XinSu的隐秘性，UpdateChecker无疑更为大胆，直接将文件下回到本地执行，并且传输的PE文件未进行任何加密处理，可以通过流量直接识别。</p>
-<h2 id="处置建议"><a href="#处置建议" class="headerlink" title="处置建议"></a>处置建议</h2><p>那么，重点来了！如何让电脑清净起来呢？本文以两款压缩软件为例，介绍了相关流氓广告是何如被执行的，在这里笔者给出大家几点建议：</p>
-<p><strong>1、常用软件尽量在官网下载。</strong></p>
-<p><strong>2、不要使用下载网站的高速下载，多数情况会被捆绑下载垃圾文件全家桶。</strong></p>
+<h4 id="2、小结"><a href="#2、小结" class="headerlink" title="2、小结"></a>2、小结</h4><p>相对于XinSu的隐秘性，UpdateChecker无疑更为大胆，直接将文件下回到本地执行，并且传输的PE文件未进行任何加密处理，可以通过流量直接识别。</p>
+<h2 id="二、处置建议"><a href="#二、处置建议" class="headerlink" title="二、处置建议"></a>二、处置建议</h2><p>那么，重点来了！如何让电脑清净起来呢？本文以两款压缩软件为例，介绍了相关流氓广告是何如被执行的，在这里笔者给出大家几点建议：</p>
+<p>1、常用软件尽量在官网下载。</p>
+<p>2、不要使用下载网站的高速下载，多数情况会被捆绑下载垃圾文件全家桶。</p>
 <p><strong>如果已经遇到了流氓广告骚扰，大家可以自行使用Autoruns和Procexp对广告进程和服务进行甄别。</strong></p>
 
       

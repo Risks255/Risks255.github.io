@@ -207,7 +207,7 @@
     <div><a class="about  hasFriend  site_url"  href="/about">About</a><a style="width: 50%"  class="friends">Friends</a></div>
 </div>
 <input type="hidden" id="yelog_site_posts_number" value="15">
-<input type="hidden" id="yelog_site_word_count" value="21.3k">
+<input type="hidden" id="yelog_site_word_count" value="21.4k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -509,7 +509,7 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2021-01-31 11:31:32'>2020-07-27 10:51</time>
+            Created At : <time class="date" title='Updated At: 2021-02-03 19:50:02'>2020-07-27 10:51</time>
         
     </div>
     <div class="article-meta">
@@ -563,9 +563,9 @@
         <p><strong>原文章发布于看雪论坛和安全分析与研究公众号，现将文章整理进个人blog。</strong></p>
 <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>前几天，接到一个nginx后门样本，本着就分析和复现的思路，完整的将整个过程做一次复现，不料最终还获取到了后门的核心代码部分，遂将其整理发布。</p>
 <p>在后续分析之前先来了解下nginx后门的功能。通过在Cookie中包含特征字符串lkfakjfa，并填写需要反弹的ip和端口，完成shell反弹，这就是后门的一个大致情况。</p>
-<h2 id="样本信息"><a href="#样本信息" class="headerlink" title="样本信息"></a>样本信息</h2><p>​    MD5: ab498686505dfc645e14c6edad280da7</p>
+<h2 id="样本信息"><a href="#样本信息" class="headerlink" title="样本信息"></a>样本信息</h2><p>MD5: ab498686505dfc645e14c6edad280da7</p>
 <p>VT中可直接下来，前几日还是0查杀，目前只有tencent可以查杀。</p>
-<h2 id="样本分析"><a href="#样本分析" class="headerlink" title="样本分析"></a>样本分析</h2><p>​    在已有的分析情报的帮助下，得知nginx后门位于ngx_http_header_filter，IDA装载样本，发现样本带有符号信息。</p>
+<h2 id="样本分析"><a href="#样本分析" class="headerlink" title="样本分析"></a>样本分析</h2><p>在已有的分析情报的帮助下，得知nginx后门位于ngx_http_header_filter，IDA装载样本，发现样本带有符号信息。</p>
 <p><img src="/img/%E6%9F%90Nginx%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90%E4%B8%8E%E5%A4%8D%E7%8E%B0/clip_image001.png"></p>
 <p>找到ngx_http_header_filter函数，找到了关键字符串lkfakjf。</p>
 <p><img src="/img/%E6%9F%90Nginx%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90%E4%B8%8E%E5%A4%8D%E7%8E%B0/clip_image002.png"></p>
@@ -574,14 +574,14 @@
 <p>通过对connect_shell进行分析发现，是一个反弹shell的功能，利用socket编程完成shell反弹。</p>
 <p><img src="/img/%E6%9F%90Nginx%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90%E4%B8%8E%E5%A4%8D%E7%8E%B0/clip_image005.png"></p>
 <h2 id="后门复现"><a href="#后门复现" class="headerlink" title="后门复现"></a>后门复现</h2><p>首先启动后门nginx文件，由于nginx会绑定80端口，如果多次启动会提示80端口被占用而无法启动。</p>
-<p><img src="/img/%E6%9F%90Nginx%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90%E4%B8%8E%E5%A4%8D%E7%8E%B0/clip_image006.png"></p>
+<p><img src="/img/%E6%9F%90Nginx%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90%E4%B8%8E%E5%A4%8D%E7%8E%B0/clip_image006.png" alt="http://irs.nsfocus.com/irs/nis/picture/6960"></p>
 <p>接着进行本地监听9999</p>
-<p><img src="/img/%E6%9F%90Nginx%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90%E4%B8%8E%E5%A4%8D%E7%8E%B0/clip_image007.png"></p>
+<p><img src="/img/%E6%9F%90Nginx%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90%E4%B8%8E%E5%A4%8D%E7%8E%B0/clip_image007.png" alt="http://irs.nsfocus.com/irs/nis/picture/6961"></p>
 <p>使用curl来触发漏洞。</p>
-<p><img src="/img/%E6%9F%90Nginx%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90%E4%B8%8E%E5%A4%8D%E7%8E%B0/clip_image008.png"></p>
+<p><img src="/img/%E6%9F%90Nginx%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90%E4%B8%8E%E5%A4%8D%E7%8E%B0/clip_image008.png" alt="http://irs.nsfocus.com/irs/nis/picture/6962"></p>
 <p>此时nc里已经得到了shell</p>
-<p><img src="/img/%E6%9F%90Nginx%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90%E4%B8%8E%E5%A4%8D%E7%8E%B0/clip_image009.png"></p>
-<p><img src="/img/%E6%9F%90Nginx%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90%E4%B8%8E%E5%A4%8D%E7%8E%B0/clip_image010.png"></p>
+<p><img src="/img/%E6%9F%90Nginx%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90%E4%B8%8E%E5%A4%8D%E7%8E%B0/clip_image009.png" alt="http://irs.nsfocus.com/irs/nis/picture/6963"></p>
+<p><img src="/img/%E6%9F%90Nginx%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90%E4%B8%8E%E5%A4%8D%E7%8E%B0/clip_image010.png" alt="http://irs.nsfocus.com/irs/nis/picture/6964"></p>
 <h2 id="原理分析"><a href="#原理分析" class="headerlink" title="原理分析"></a>原理分析</h2><p>通过gdb调试和IDA分析发现，要判断cookies中是否存在特征字符串lkfakjf，用到了一个这样的结构体ngx_http_request_t。</p>
 <p>使用source insight打开nginx源码，定位到ngx_http_header_filter，发现参数就是ngx_http_request_t，查看该结构体的情况。</p>
 <p><img src="/img/%E6%9F%90Nginx%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90%E4%B8%8E%E5%A4%8D%E7%8E%B0/clip_image011.png"></p>
@@ -610,9 +610,9 @@
 <p>make install安装一下，安装的位置为之前配置的prefix路径。</p>
 <p><img src="/img/%E6%9F%90Nginx%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90%E4%B8%8E%E5%A4%8D%E7%8E%B0/clip_image021.jpg"></p>
 <p>运行和调试nginx文件，能够成功获取输入的特征字符串。</p>
-<p><img src="/img/%E6%9F%90Nginx%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90%E4%B8%8E%E5%A4%8D%E7%8E%B0/clip_image023.png"></p>
+<p><img src="/img/%E6%9F%90Nginx%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90%E4%B8%8E%E5%A4%8D%E7%8E%B0/clip_image023.png" alt="http://irs.nsfocus.com/irs/nis/picture/6968"></p>
 <p>其中rsi为触发漏洞的输入，rdi为内置特征字符串，这里选择了printf打印，能够成功获取到输入的特征字符串。</p>
-<p><img src="/img/%E6%9F%90Nginx%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90%E4%B8%8E%E5%A4%8D%E7%8E%B0/clip_image025.png"></p>
+<p><img src="/img/%E6%9F%90Nginx%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90%E4%B8%8E%E5%A4%8D%E7%8E%B0/clip_image025.png" alt="http://irs.nsfocus.com/irs/nis/picture/6969"></p>
 <p>接下来准备复现反弹shell，添加功能代码，代码只能适用于带有nc命令的系统，编译后进行复现操作。</p>
 <p><img src="/img/%E6%9F%90Nginx%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90%E4%B8%8E%E5%A4%8D%E7%8E%B0/clip_image026.png"></p>
 <p>现在的特征字符串被修改为123456，现在来触发该后门。</p>

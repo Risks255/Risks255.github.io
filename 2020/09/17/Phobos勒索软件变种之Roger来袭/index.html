@@ -207,7 +207,7 @@
     <div><a class="about  hasFriend  site_url"  href="/about">About</a><a style="width: 50%"  class="friends">Friends</a></div>
 </div>
 <input type="hidden" id="yelog_site_posts_number" value="15">
-<input type="hidden" id="yelog_site_word_count" value="21.3k">
+<input type="hidden" id="yelog_site_word_count" value="21.4k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -507,12 +507,12 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2021-02-01 20:02:30'>2020-09-17 09:35</time>
+            Created At : <time class="date" title='Updated At: 2021-02-03 19:47:25'>2020-09-17 09:35</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:913</span>
+        <span>Count:916</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -542,7 +542,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90"><span class="toc-text">样本分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%EF%BC%9A"><span class="toc-text">安全解决方案：</span></a></li></ol>
+        
     
 <style>
     .left-col .switch-btn,
@@ -558,13 +558,15 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>​    Roger是近期较为活跃的一款勒索病毒，通常通过RDP暴力破解+人工投放的方式进行攻击，攻击者成功入侵后，通常会关闭系统的安全软件防护功能，运行勒索病毒，加密后会修改文件后缀为[原文件名]+id[随机字符串]+[邮箱地址].ROGER，目前该勒索无法解密。</p>
+        <p><strong>一、背景</strong></p>
+<p>​    Roger是近期较为活跃的一款勒索病毒，通常通过RDP暴力破解+人工投放的方式进行攻击，攻击者成功入侵后，通常会关闭系统的安全软件防护功能，运行勒索病毒，加密后会修改文件后缀为[原文件名]+id[随机字符串]+[邮箱地址].ROGER，目前该勒索无法解密。</p>
 <p>行为概述</p>
 <p>​    勒索病毒运行后，创建互斥体，接着遍历数据库，邮件，办公软件等相关进程，并中止查询到的进程，解除文件占用，以保证加密文件成功。之后运行加密模块。与此同时，内存解密出勒索信息、需要加密文件后缀名、以及被加密文件随机后缀等。之后遍历系统文件目录，加密相关文件，最后弹出勒索信息。</p>
 <p>值得关注的是，该勒索病毒在运行过程中会进行自复制，并在注册表添加自启动项，如果没有清除干净系统中残留的病毒体，重启后很可能会遭遇二次加密。</p>
 <p><img src="/img/Phobos%E5%8B%92%E7%B4%A2%E8%BD%AF%E4%BB%B6%E5%8F%98%E7%A7%8D%E4%B9%8BRoger%E6%9D%A5%E8%A2%AD/clip_image002.jpg"></p>
 <p>Roger执行流程图</p>
-<h2 id="样本分析"><a href="#样本分析" class="headerlink" title="样本分析"></a>样本分析</h2><p>​    首先是有一层upx的外壳，用upx提供的脱壳工具来搞定。</p>
+<p><strong>二、样本分析</strong></p>
+<p>​    首先是有一层upx的外壳，用upx提供的脱壳工具来搞定。</p>
 <p><img src="/img/Phobos%E5%8B%92%E7%B4%A2%E8%BD%AF%E4%BB%B6%E5%8F%98%E7%A7%8D%E4%B9%8BRoger%E6%9D%A5%E8%A2%AD/clip_image004.jpg"></p>
 <p>​    紧接着获取VirtualAlloc的地址，用于分配新的内存来存储内部数据。</p>
 <p><img src="/img/Phobos%E5%8B%92%E7%B4%A2%E8%BD%AF%E4%BB%B6%E5%8F%98%E7%A7%8D%E4%B9%8BRoger%E6%9D%A5%E8%A2%AD/clip_image006.jpg"></p>
@@ -586,13 +588,14 @@
 <p><img src="/img/Phobos%E5%8B%92%E7%B4%A2%E8%BD%AF%E4%BB%B6%E5%8F%98%E7%A7%8D%E4%B9%8BRoger%E6%9D%A5%E8%A2%AD/clip_image022.jpg"></p>
 <p>​    通过进程内存替换完成了一下这些功能，包含目标进程和服务名以及实现多种方式的开机启动，最后删除掉系统的shadow，防止数据恢复。</p>
 <p><img src="/img/Phobos%E5%8B%92%E7%B4%A2%E8%BD%AF%E4%BB%B6%E5%8F%98%E7%A7%8D%E4%B9%8BRoger%E6%9D%A5%E8%A2%AD/clip_image024.jpg"></p>
-<p>发现Roger设置了很多的开启启动情况，详细如下图所示。</p>
+<p>发现roger设置了很多的开启启动情况，详细如下图所示。</p>
 <p><img src="/img/Phobos%E5%8B%92%E7%B4%A2%E8%BD%AF%E4%BB%B6%E5%8F%98%E7%A7%8D%E4%B9%8BRoger%E6%9D%A5%E8%A2%AD/clip_image026.jpg"></p>
 <p>​    首先是注册表的自启动，自启动的目录为SOFTWARE\Microsoft\Windows\CurrentVersion\Run，其中又包含了HKEY_LOCAL_MACHINE和HKEY_CURRENT_USER，这里可以借助Autoruns来帮助完成查找。</p>
 <p><img src="/img/Phobos%E5%8B%92%E7%B4%A2%E8%BD%AF%E4%BB%B6%E5%8F%98%E7%A7%8D%E4%B9%8BRoger%E6%9D%A5%E8%A2%AD/clip_image028.jpg"></p>
 <p>接着是通过Start up目录实现开机文件自启动，这里可以借助everything来帮助寻找。</p>
 <p><img src="/img/Phobos%E5%8B%92%E7%B4%A2%E8%BD%AF%E4%BB%B6%E5%8F%98%E7%A7%8D%E4%B9%8BRoger%E6%9D%A5%E8%A2%AD/clip_image030.jpg"></p>
-<h2 id="安全解决方案："><a href="#安全解决方案：" class="headerlink" title="安全解决方案："></a>安全解决方案：</h2><p>迪普科技安全研究院提醒广大用户：针对已经出现勒索现象的用户，由于暂时没有解密工具，建议尽快对感染主机进行断网隔离。</p>
+<p><strong>3**</strong>、安全解决方案：**</p>
+<p>迪普科技安全研究院提醒广大用户：针对已经出现勒索现象的用户，由于暂时没有解密工具，建议尽快对感染主机进行断网隔离。</p>
 <p>1、由于Phobos家族会利用RDP（远程桌面协议），建议关闭3389等远RDP相关端口，如果确实有工作业务需要，建议进行白名单配置，只允许白名单内的IP连接登陆。</p>
 <p>2、尽量关闭不必要的文件共享，或使用强密码对文件共享加密保护。</p>
 <p>3、定期更换帐户密码，采用高强度的密码，避免使用弱口令密码，同时避免使用统一的密码。</p>

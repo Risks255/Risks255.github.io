@@ -207,7 +207,7 @@
     <div><a class="about  hasFriend  site_url"  href="/about">About</a><a style="width: 50%"  class="friends">Friends</a></div>
 </div>
 <input type="hidden" id="yelog_site_posts_number" value="15">
-<input type="hidden" id="yelog_site_word_count" value="21.3k">
+<input type="hidden" id="yelog_site_word_count" value="21.4k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -507,12 +507,12 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2021-02-01 20:01:58'>2020-07-13 11:41</time>
+            Created At : <time class="date" title='Updated At: 2021-02-03 19:47:48'>2020-07-13 11:41</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:1.1k</span>
+        <span>Count:1.2k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -558,9 +558,10 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>上周看了大佬些发的反射DLL注入的文章，对我很有启发，让我想起了前段时间遇到的基于反射DLL注入的一些应用，小弟不才，如果有什么问题，还请各位大佬指点一二。</p>
+        <p><strong>原文章发布于看雪论坛和安全分析与研究公众号，现将文章整理进个人blog。</strong></p>
+<p>上周看了大佬些发的反射DLL注入的文章，对我很有启发，让我想起了前段时间遇到的基于反射DLL注入的一些应用，小弟不才，如果有什么问题，还请各位大佬指点一二。</p>
 <h2 id="分享背景"><a href="#分享背景" class="headerlink" title="分享背景"></a>分享背景</h2><p>这个基于反射DLL注入应用的样本来源于红蓝对抗，当时分析时觉得这技术挺有意思的，但是没有做过多的记录。看了大佬发的反射DLL注入，遂有了这篇文章的诞生。</p>
-<h2 id="技术应用"><a href="#技术应用" class="headerlink" title="技术应用"></a>技术应用</h2><p>对于反射DLL注入应用其实已经有很多了，但是最大的应该还是要归功于CobaltStrike和Metasploit两大著名的利用工具。CobaltStrike和Metasploit在渗透方面能力突出，堪比神器也不为过。<strong>今天分享的应用便是来源于CobaltStrike生成的后门。而这后门则是利用了反射DLL注入技术，从而实现DLL文件的不落地。</strong>不仅如此，<strong>这里面还用到了Dos头部分的空间，来实现定位反射DLL注入函数，最后通过DLLMain执行相关后门操作。</strong></p>
+<h2 id="技术应用"><a href="#技术应用" class="headerlink" title="技术应用"></a>技术应用</h2><p>对于反射DLL注入应用其实已经有很多了，但是最大的应该还是要归功于CobaltStrike和Metasploit两大著名的利用工具。CobaltStrike和Metasploit在渗透方面能力突出，堪比神器也不为过。<strong>今天分享的应用便是来源于CobaltStrike生成的后门。而这后门则是利用了反射DLL注入技术，从而实现DLL文件的不落地，不仅如此，这里面还用到了Dos头部分的空间，来实现定位反射DLL注入函数，最后通过DLLMain执行相关后门操作。</strong></p>
 <h2 id="技术解析"><a href="#技术解析" class="headerlink" title="技术解析"></a>技术解析</h2><p>接下来我们来看一看到底有什么不一样呢</p>
 <p>首先是基于反射DLL注入技术并修改了Dos头信息的情况。</p>
 <p><img src="/img/%E5%8F%8D%E5%B0%84%E6%B3%A8%E5%85%A5%E4%B9%8B%E7%BA%A2%E8%93%9D%E5%AF%B9%E6%8A%97/clip_image002.jpg"></p>
@@ -570,13 +571,13 @@
 <p>接下来我们来看看被标记为beacon.dll的情况，使用ida加载后可以看到有一个名为ReflectiveLoader(x)的导出函数，这个函数就是执行反射式DLL的功能，修改Dos头的目的也是为了去执行ReflectiveLoader(x)导出函数。</p>
 <p><img src="/img/%E5%8F%8D%E5%B0%84%E6%B3%A8%E5%85%A5%E4%B9%8B%E7%BA%A2%E8%93%9D%E5%AF%B9%E6%8A%97/clip_image005.png"></p>
 <p>接下来我们来解析一下为什么那段代码可以成功的调用ReflectiveLoader(x)导出函数。</p>
-<p>首先的dec ebp 和pop edx 是16进制4D和5A对应的汇编代码，即DOS头的MZ Magic Number。</p>
+<p>首先的dec ebp 和pop edx 是16进制4D和5A对应的汇编代码，并没有什么特殊的含义。</p>
 <p>接下来的E8 00000000 其中的00000000表示机器码的内容。</p>
 <p>这里就要介绍一下关于call后地址如何计算的问题了，一个最简单的办法就是记得这个计算公式。</p>
 <p>机器码内容=当前地址-目标地址+5；</p>
 <p>当前地址=3c0002，所以目的地址=机器码内容-当初地址+5=3c0007；</p>
 <p>所以call的地址为call 3c0007；</p>
-<p>pop ebx 给ebx赋值为3c0007也就是当前ebp的值</p>
+<p>pop ebx 给ebx赋值为3c0007也就是当前esp的值</p>
 <p>mov edi,ebx 将ebx赋值给edi</p>
 <p>push edx 将edx入栈</p>
 <p>inc ebp 恢复之前dec ebp的值</p>

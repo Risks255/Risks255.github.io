@@ -207,7 +207,7 @@
     <div><a class="about  hasFriend  site_url"  href="/about">About</a><a style="width: 50%"  class="friends">Friends</a></div>
 </div>
 <input type="hidden" id="yelog_site_posts_number" value="15">
-<input type="hidden" id="yelog_site_word_count" value="21.3k">
+<input type="hidden" id="yelog_site_word_count" value="21.4k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -509,12 +509,12 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2021-01-31 11:06:25'>2020-07-03 09:55</time>
+            Created At : <time class="date" title='Updated At: 2021-02-03 19:46:09'>2020-07-03 09:55</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:2.5k</span>
+        <span>Count:2.4k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -544,7 +544,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E8%83%8C%E6%99%AF"><span class="toc-text">事件背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B7%E6%9C%AC%E6%9D%A5%E6%BA%90"><span class="toc-text">样本来源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E5%A7%8B%E5%88%86%E6%9E%90"><span class="toc-text">开始分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%B9%E5%BE%81%E7%A0%81"><span class="toc-text">特征码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E8%83%8C%E6%99%AF"><span class="toc-text">事件背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E5%A7%8B%E5%88%86%E6%9E%90"><span class="toc-text">开始分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%B9%E5%BE%81%E7%A0%81"><span class="toc-text">特征码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -561,13 +561,93 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p><strong>原文章发布于看雪论坛和安全分析与研究公众号，现将文章整理进个人blog。</strong></p>
-<h2 id="事件背景"><a href="#事件背景" class="headerlink" title="事件背景"></a>事件背景</h2><p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/%E4%BA%8B%E4%BB%B6%E8%83%8C%E6%99%AF.png"><br>前两天看了某公众号发布的最新的海莲花分析报告，于是乎跟着学习一波，遂有了本文之后要提及的故事了。<br><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/%E5%88%86%E6%9E%90%E8%AE%B0%E5%BD%95.png"><br>在文章的结尾，出现了一个名为Denes家族的后门样本，由于没有搞过，想着自己跟着文章的步骤搞一搞，结果一搞就一发不可收拾，遇到这种问题，各种坑，我是被坑哭了，不知道各位大佬可曾遇到过这样的问题。<br> <img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/%E5%A7%94%E5%B1%88%E5%B7%B4%E5%B7%B4.png"></p>
-<h2 id="样本来源"><a href="#样本来源" class="headerlink" title="样本来源"></a>样本来源</h2><p>参考链接 <a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/wPpaWHj9kj7WV62Y62pciA">样本来源</a></p>
-<h2 id="开始分析"><a href="#开始分析" class="headerlink" title="开始分析"></a>开始分析</h2><p>来来来，开始我的分析过程，首先是跟着文章发表者的分析过程，快速的找到Denes后门所在的内存区域，给它来个dump。<br>这个记录已经是我分析完之后才发写的所以，我为了展现出我所踩过的坑，又踩了一遍给大家演示，我太难了。<br>第一次分析，使用的是OllyICE,不带strongod的插件，异常设置如下所示，可能有读者会问我为啥要设置，当然是因为调试的时候发现会触发某些异常导致调试的问题，才会去设置异常。<br> <img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/%E8%B0%83%E8%AF%95%E8%AE%BE%E7%BD%AE.png"><br>为了快速到达内存dump，我经过多次测试发现了一些好办法，首先是要等待恶意dll的加载，bp LoadLibraryW，让程序跑起来，看加载的位置。<br><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/LoadLibraryW.png"><br>这时，取消LoadLibraryW，下VirtualAlloc断点，来看加载的SoftwareUpdateFiles.locale内容所在的内存区域。<br><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/VirtualAlloc.png"><br>返回到用户层之后，发现了这段内存的地址，一般API返回地址通常在EAX中，内存窗口 等待写入过程。<br> <img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/%E8%BF%94%E5%9B%9E%E5%9C%B0%E5%9D%80.png"><br>紧接着就有一个ReadFileAPI调用，估摸着就是准备加载SoftwareUpdateFiles.locale的内容了。<br><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/ReadFile.png"><br>此时内存中已经被写入了相关数据。<br> <img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/%E5%86%99%E5%85%A5%E7%9A%84%E7%9B%B8%E5%85%B3%E6%95%B0%E6%8D%AE.png"><br>这里还需要另外一个API来完成数据的解密写写入过程，RtlMoveMemory，这个API也是在分析文章中提到的，这里为了更快抵达战场，而进行的快速定位，bp RtlMoveMemory 之后，取消其他的断点，执行。<br> <img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/RtlMoveMemory.png"><br>这里的地址就是Denes文件的一部分了，在数据窗口，翻到头就可以发现，看到了熟悉的Dos头部。<br> <img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/PE%E6%96%87%E4%BB%B6%E5%A4%B4.png"><br>最后通过一串特征码定位，通过od的ctrl+s搜索命令序列来完成，记得勾选整个块，这串特征码是根据文章中提及的进入PE文件执行之前的最后一个调用call来确定的。<br> <img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/%E7%89%B9%E5%BE%81%E7%A0%81%E5%AE%9A%E4%BD%8D.png"><br>可以看到这里od给了我们找到的结果，在call eax加断点，取消之前所有的断点执行到这里来。<br> <img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/%E6%89%BE%E5%88%B0%E7%89%B9%E5%BE%81%E7%A0%81.png"><br>这时候整个Denes文件已经解码完成了，该收获成果了，从内存中dump出来看一看。本以为分析就此结束了，不曾想遇到个应急，没办法先放下了Denes的分析工作，先去把应急处理了。<br>处理完应急回来继续分析时，已经是第二天了。将dump文件一看，我有点懵，啥情况难道昨天dump的文件不对劲？<br> <img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/%E8%BF%90%E8%A1%8C%E5%87%BA%E9%94%99.png"><br>Entry Point为0？，难道没有入口点？估计要第二次分析了，ε=(´ο｀*)))唉，准备开始第二次分析吧。<br>第二次分析，因为之前的应急刚处理完，忘记了之前用的不是吾爱版的od，调试了之后发现程序莫名其妙的就崩溃了，我内心是崩溃的(之前调试不是好好的嘛，咋就崩溃了？)<br> <img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/emmm.png"><br>这错误也是尼玛的很奇怪，异常代码c0000005一般就是内存访问异常，但是给我的异常偏移为0？难道程序用到了0内存？一般情况下，访问0内存是会出现问题的，但是我记得昨天调试的时候，好像没有这个毛病啊？<br>就这样，第二次调试以失败告终，还特意在群里问了问各位大佬，依旧是没有得到什么有用的信息。没办法就这样开启了第三次调试。<br>第三次调试，不过这次用的x64dbg，此次调试很顺利，不过x64dbg有个比较麻烦的问题是API断下后，不像OD一样将参数集中在一起而是这样显示的。<br><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/x64dbg%E5%8F%82%E6%95%B0%E6%98%BE%E7%A4%BA.png"><br>成功的从内存中dump出来了Denes样本，但是还是有很多疑问，对比看雪的一篇文章 <a target="_blank" rel="noopener" href="https://bbs.pediy.com/thread-259596.htm%E3%80%82">https://bbs.pediy.com/thread-259596.htm。</a><br> <img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/%E8%B5%84%E6%BA%90%E6%95%B0%E6%8D%AE.png"><br>我发现个问题，为啥这个Denes资源不可见呢？这种问题几乎没遇到过，通过搜索引擎也得不到什么有效信息。<br> <img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/%E8%B5%84%E6%BA%90%E4%B8%8D%E5%8F%AF%E8%A7%81.png"><br>想着要不就这么放弃了吧，反正也不差这么一点，但是之后自己做的和心里想的就表里不一了，继续从刚才的文章中寻找相关的信息。果然想的什么都是扯淡，动手搞一搞比啥都强，最后还是本着一颗追求到底的心，又开始第四次的调试过程。<br>第四次调试，还是用回了之前的OllyICE继续调试，跳过之前定位到Denes的过程，来到最后的call eax这里。由于要加载资源函数所有就下了相关的API断点，FindResource将A系列和W系列都打上断点，还有LoadResource断点，运行看是个什么情况。<br> <img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/FindResource.png"><br>嗯？什么东西，这个hModule这个地址咋这么熟悉呢？数据窗口一跟随，卧槽咧，这不就是Denes嘛，果然在资源上做了一些手段，导致资源编辑工具无法直接查看，但是程序功能成功的定位，就表示内容还是存在的。<br> <img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/PEDOS%E5%A4%B4.png"><br>通过查询API发现，LoadResource返回的地址，就是资源所在的内存地址。<br> <img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/LoadResource.png"><br>果不其然，在内存中找到了这段资源文件。<br> <img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/%E5%8A%A0%E8%BD%BD%E8%B5%84%E6%BA%90%E5%88%B0%E5%86%85%E5%AD%98.png"><br>将整个资源文件从内存中dump出来放着，以防像之前一样重头再来，然后我就像个傻逼一样的盯着这段资源端，一直知道程序跑起来都没看到解码的过程，心想着啥情况，不是说会进行解密嘛，我咋没看到这数据有啥变化呢？？？<br><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/emmm.png"><br>不过在这个过程中我发现出现了域名的解析，但是没有转向内存，因为一心傻逼的盯着了资源数据的变化。没得搞了程序已经跑飞了，只有第五次调试了。<br>第五次调试，在弄好之前的种种问题之后，缓慢仔细的调试着这段花指令代码，找到之前出现域名解析的call调用，应该就可以找到整段解密的过程了。现在的问题就是如何确定第二段代码需要的内存从哪里来？<br>再一次调试来到了Call eax这里，查看内存的情况，可以看到目前第二段内存并没有出现。</p>
-<p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/%E5%86%85%E5%AD%98%E6%9F%A5%E7%9C%8B.png"><br>现在步过call eax，其中触发了一次HeapCreate分配，不过大小只有1024，分配好的地址如下图所示。<br> <img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/HeapCreate%E5%A4%B4%E4%BF%A1%E6%81%AF.png"><br>卧槽咧，难道真的是用的HeapCreate来创建，并扩充了这个heap的大小？为什么这么说，来看一下内存的布局情况，已经无限接近于之前出现的第二段内存的情况了。<br>当从call eax返回之时，可以发现内存之前的1000大小变成了3000。<br> <img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/%E5%86%85%E5%AD%98%E4%BF%A1%E6%81%AF.png"><br>正当我以为这就是第二段内存是，VirtualAlloc的出现让我觉得，heap应该不是第二段的内存了，这时候再来看看内存布局的情况。<br> <img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/%E5%8F%98%E6%9B%B4%E7%9A%84%E5%86%85%E5%AD%98%E4%BF%A1%E6%81%AF.png"><br>这时查看内存时发现，到头来一场空，代码似乎已经解码完毕了。<br> <img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/%E4%BC%BC%E4%B9%8E%E8%A7%A3%E7%A0%81%E5%AE%8C%E6%AF%95.png"><br>不要以为我真的只是调试了5次，只是省略了很多很多重复的步骤，从刚才的测试中也知道了解密过程是在call eax中完成的，所以必须要跟进call eax进一步查看具体是什么回事。<br>第六次调试，也是我最后一次调试了，大多数已经弄明白了，就是最后的解密过程和内存分配问题了，已经找到了复制已解密的函数代码，但是依旧没有找到分配内存的API。<br> <img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/%E8%A7%A3%E5%AF%86%E4%BB%A3%E7%A0%81.png"><br>第一次调用复制后的代码情况如下图所示。<br> <img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/%E7%AC%AC%E4%B8%80%E6%AE%B5%E5%86%85%E5%AD%98%E6%95%B0%E6%8D%AE.png"><br>第二次调用复制后的代码情况如下图所示。<br> <img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/%E7%AC%AC%E4%BA%8C%E6%AE%B5%E5%86%85%E5%AD%98%E6%95%B0%E6%8D%AE.png"><br>自此整个解密的内存就找到了，只需要来一个dump即可拿出其中被解密出来的两个内置的dll文件了。</p>
-<h2 id="特征码"><a href="#特征码" class="headerlink" title="特征码"></a>特征码</h2><p>push ebx<br>push 1<br>push esi<br>add eax,esi<br>call eax<br>这一段特征码的作用是定位到解密完成的Denes的位置，通过eax的值，可以找到Denes的Dos位置。</p>
-<p>and edi,0fh<br>and esi,0fh<br>cmp edi,esi<br>pop esi<br>pop edi<br>这一段可太不容易了，而且有多个函数都有调用这一段，这时复制已解密数据的的关键点，通过命令找到该段代码的头部，调试即可发现整个复制过程。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>到此整个踩坑过程就全部结束了，整个的分析过程中，遇到了确实很多的问题，但是凭着耐心一步一步，解决了很多的问题，但是还是留下了两个问题。这段用于存放解密数据的内存区域从何而来的疑问，目前已经没有更多的精力继续搞下去了，对此感觉已经是尽力了，解密过程的代码在哪儿？应该和这段内存区域有着一定的关系，有知道该段内存区域如何来的小伙伴留言告知。</p>
+<h2 id="事件背景"><a href="#事件背景" class="headerlink" title="事件背景"></a>事件背景</h2><p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image002.jpg"></p>
+<p>前两天看了猫哥发布的最新的海莲花分析报告，于是乎跟着学习一波，遂有了本文之后要提及的故事了。</p>
+<p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image004.jpg"></p>
+<p>在文章的结尾，出现了一个名为Denes家族的后门样本，由于没有搞过，想着自己跟着猫哥的步骤搞一搞，结果一搞就一发不可收拾，遇到这种问题，各种坑，我是被坑哭了，不知道各位大佬可曾遇到过这样的问题。</p>
+<p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image005.gif"></p>
+<h2 id="开始分析"><a href="#开始分析" class="headerlink" title="开始分析"></a>开始分析</h2><p>来来来，开始我的分析过程，首先是跟着猫哥的文章，快速的找到Denes后门所在的内存区域，给它来个dump。</p>
+<p>​这个记录已经是我分析完之后才发写的所以，我为了展现出我所踩过的坑，又踩了一遍给大家演示，我太难了。</p>
+<p>​    第一次分析，使用的是OllyICE,不带strongod的插件，异常设置如下所示，可能有读者会问我为啥要设置，当然是因为调试的时候发现会触发某些异常导致调试的问题，才会去设置异常。</p>
+<p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image006.png"></p>
+<p>为了快速到达内存dump，我经过多次测试发现了一些好办法，首先是要等待恶意dll的加载，bp LoadLibraryW，让程序跑起来，看加载的位置。</p>
+<p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image008.jpg"></p>
+<p>这时，取消LoadLibraryW，下VirtualAlloc断点，来看加载的SoftwareUpdateFiles.locale内容所在的内存区域。</p>
+<p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image009.png"></p>
+<p>返回到用户层之后，发现了这段内存的地址，一般API返回地址通常在EAX中，内存窗口 等待写入过程。</p>
+<p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image010.png"></p>
+<p>紧接着就有一个ReadFileAPI调用，估摸着就是准备加载SoftwareUpdateFiles.locale的内容了。</p>
+<p>​<img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image012.jpg"></p>
+<p>此时内存中已经被写入了相关数据。</p>
+<p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image014.jpg"></p>
+<p>​    这里还需要另外一个API来完成数据的解密写写入过程，RtlMoveMemory，这个API也是在猫哥的分析文章中提到的，这里为了更快抵达战场，而进行的快速定位，bp RtlMoveMemory 之后，取消其他的断点，执行。</p>
+<p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image015.png"></p>
+<p>这里的地址就是Denes文件的一部分了，在数据窗口，翻到头就可以发现，看到了熟悉的Dos头部。</p>
+<p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image017.jpg"></p>
+<p>​    最后通过一串特征码定位，通过od的ctrl+s搜索命令序列来完成，记得勾选整个块，这串特征码是根据猫哥文章中提及的进入PE文件执行之前的最后一个调用call来确定的。</p>
+<p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image018.png"></p>
+<p>可以看到这里od给了我们找到的结果，在call eax加断点，取消之前所有的断点执行到这里来。</p>
+<p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image019.png"></p>
+<p>​    这时候整个Denes文件已经解码完成了，该收获成果了，从内存中dump出来看一看。本以为分析就此结束了，不曾想遇到个应急，没办法先放下了Denes的分析工作，先去把应急处理了。</p>
+<p>处理完应急接着分析时，已经是第二天了。将dump文件一看，我开始有点懵了，啥情况难道昨天dump的文件不对劲？</p>
+<p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image020.png"></p>
+<p>​Entry Point为0？，难道没有入口点？估计要第二次分析了，ε=(´ο｀*)))唉，准备开始第二次分析吧。</p>
+<p>​    第二次分析，因为之前的应急刚处理完，忘记了之前用的不是吾爱版的od，调试了之后发现程序莫名其妙的就崩溃了，我内心是崩溃的(之前调试不是好好的嘛，咋就崩溃了？)</p>
+<p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image021.png"></p>
+<p>​    这错误也是很奇怪，异常代码c0000005一般就是内存访问异常，但是给我的异常偏移为0？难道程序用到了0内存？一般情况下，访问0内存是会出现问题的，但是我记得昨天调试的时候，好像没有这个毛病啊？</p>
+<p>​    就这样，第二次调试以失败告终，还特意在群里问了问各位大佬，依旧是没有得到什么有用的信息。没办法就这样开启了第三次调试。</p>
+<p>​    第三次调试，不过这次用的x64dbg，此次调试很顺利，不过x64dbg有个比较麻烦的问题是API断下后，不像OD一样将参数集中在一起而是这样显示的。</p>
+<p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image022.png"></p>
+<p>成功的从内存中dump出来了Denes样本，但是还是有很多疑问，对比看雪的一篇文章 <a target="_blank" rel="noopener" href="https://bbs.pediy.com/thread-259596.htm%E3%80%82">https://bbs.pediy.com/thread-259596.htm。</a></p>
+<p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image024.jpg"></p>
+<p>我发现个问题，为啥这个Denes资源不可见呢？这种问题几乎没遇到过，通过搜索引擎也得不到什么有效信息。</p>
+<p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image026.jpg"></p>
+<p>想着要不就这么放弃了吧，反正也不差这么一点，但是之后自己做的和心里想的就表里不一了，继续从刚才的文章中寻找相关的信息。果然想的什么都是扯淡，动手搞一搞比啥都强，最后还是本着一颗追求到底的心，又开始第四次的调试过程。</p>
+<p>​第四次调试，还是用回了之前的OllyICE继续调试，跳过之前定位到Denes的过程，来到最后的call eax这里。由于要加载资源函数所有就下了相关的API断点，FindResource将A系列和W系列都打上断点，还有LoadResource断点，运行看是个什么情况。</p>
+<p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image027.png"></p>
+<p>​    嗯？什么东西，这个hModule这个地址咋这么熟悉呢？数据窗口一跟随，卧槽咧，这不就是Denes嘛，果然在资源上做了一些手段，导致资源编辑工具无法直接查看，但是程序功能成功的定位，就表示内容还是存在的。</p>
+<p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image029.jpg"></p>
+<p>通过查询API发现，LoadResource返回的地址，就是资源所在的内存地址。</p>
+<p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image030.png"></p>
+<p>果不其然，在内存中找到了这段资源文件。</p>
+<p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image032.jpg"></p>
+<p>​    将整个资源文件从内存中dump出来放着，以防像之前一样重头再来，然后我就像个傻逼一样的盯着这段资源端，一直知道程序跑起来都没看到解码的过程，心想着啥情况，不是说会进行解密嘛，我咋没看到这数据有啥变化呢？？？</p>
+<p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image033.gif"></p>
+<p>不过在这个过程中我发现出现了域名的解析，但是没有转向内存，因为一心傻逼的盯着了资源数据的变化。程序已经跑飞了，只有第五次调试了。</p>
+<p>​    第五次调试，在弄好之前的种种问题之后，缓慢仔细的调试着这段花指令代码，找到之前出现域名解析的call调用，应该就可以找到整段解密的过程了。现在的问题就是如何确定第二段代码需要的内存从哪里来？</p>
+<p>再一次调试来到了call eax这里，查看内存的情况，可以看到目前第二段内存并没有出现。</p>
+<p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image034.png"> </p>
+<p>​现在步过call eax，其中触发了一次HeapCreate分配，不过大小只有1024，分配好的地址如下图所示。</p>
+<p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image035.png"></p>
+<p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image037.jpg"></p>
+<p>​    难道真的是用的HeapCreate来创建，并扩充了这个heap的大小？为什么这么说，来看一下内存的布局情况，已经无限接近于之前出现的第二段内存的情况了。 </p>
+<p>当从call eax返回之时，可以发现内存之前的1000大小变成了3000。</p>
+<p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image038.png"></p>
+<p>​    正当我以为这就是第二段内存是，VirtualAlloc的出现让我觉得，heap应该不是第二段的内存了，这时候再来看看内存布局的情况。</p>
+<p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image039.png"></p>
+<p>这时查看内存时发现，到头来一场空，代码似乎已经解码完毕了。</p>
+<p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image041.jpg"></p>
+<p>不要以为我真的只是调试了5次，只是省略了很多很多重复的步骤，从刚才的测试中也知道了解密过程是在call eax中完成的，所以必须要跟进call eax进一步查看具体是什么回事。</p>
+<p>​    第六次调试，也是我最后一次调试了，大多数已经弄明白了，就是最后的解密过程和内存分配问题了，已经找到了复制已解密的函数代码，但是依旧没有找到分配内存的API。</p>
+<p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image042.png"></p>
+<p>第一轮赋值后的代码情况如下图所示。</p>
+<p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image044.jpg"></p>
+<p>第二次复制后的代码情况如下图所示。</p>
+<p><img src="/img/Denes%E5%90%8E%E9%97%A8%E5%88%86%E6%9E%90/clip_image046.jpg"></p>
+<p>​自此整个解密的内存就找到了，只需要来一个dump即可拿出其中被解密出来的两个内置的dll文件了。</p>
+<h2 id="特征码"><a href="#特征码" class="headerlink" title="特征码"></a>特征码</h2><p>push ebx</p>
+<p>push 1</p>
+<p>push esi</p>
+<p>add eax,esi</p>
+<p>call eax</p>
+<p>这一段特征码的作用是定位到解密完成的Denes的位置，通过eax的值，可以找到Denes的Dos位置。</p>
+<p>and edi,0fh</p>
+<p>and esi,0fh</p>
+<p>cmp edi,esi</p>
+<p>pop esi</p>
+<p>pop edi</p>
+<p>这一段可太不容易了，而且有多个函数都有调用这一段，这时复制已解密数据的的关键点，通过命令找到该段代码的头部，调试即可发现整个复制过程。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>​    到此整个踩坑过程就全部结束了，整个的分析过程中，遇到了确实很多的问题，但是凭着耐心一步一步，解决了很多的问题，但是还是留下了两个问题。这段用于存放解密数据的内存区域从何而来的疑问，目前已经没有更多的精力继续搞下去了，对此感觉已经是尽力了，解密过程的代码在哪儿？应该和这段内存区域有着一定的关系，有知道该段内存区域如何来的小伙伴可以在公众号下方留言告知。</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以通过评论或者QQ972476182联系我。 </span>
