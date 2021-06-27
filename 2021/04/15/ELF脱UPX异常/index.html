@@ -613,7 +613,7 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2021-06-27 18:32:09'>2021-04-15 10:08</time>
+            Created At : <time class="date" title='Updated At: 2021-06-27 18:52:26'>2021-04-15 10:08</time>
         
     </div>
     <div class="article-meta">
@@ -665,13 +665,13 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>1、样本适用于Linux 32位，架构为MIPS平台，并且采用静态连接的方式，去除了符号相关信息。</p>
-<p><img src="/img/fileinfo.png"></p>
+<p><img src="/img/ELF%E8%84%B1UPX%E5%BC%82%E5%B8%B8/fileinfo.png"></p>
 <p>2、样本被upx加壳保护，并且<strong>通过upx无法脱壳，错误信息p_info corrupted。</strong></p>
-<p><img src="/img/errorinfo.png"></p>
+<p><img src="/img/ELF%E8%84%B1UPX%E5%BC%82%E5%B8%B8/errorinfo.png"></p>
 <p>3、样本修复ELF的p_info结构，<strong>结构信息来源于结尾UPX偏移为0x20的4个字节，将其填充到0x84开始的8个字节</strong>。</p>
-<p> <img src="/img/fix.png"></p>
+<p> <img src="/img/ELF%E8%84%B1UPX%E5%BC%82%E5%B8%B8/fix.png"></p>
 <p>4、样本脱壳upx –d指令，成功脱壳。</p>
-<p><img src="/img/unpack.png"></p>
+<p><img src="/img/ELF%E8%84%B1UPX%E5%BC%82%E5%B8%B8/unpack.png"></p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以通过评论或者QQ972476182联系我。 </span>

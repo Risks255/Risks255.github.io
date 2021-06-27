@@ -611,7 +611,7 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2021-06-27 18:38:37'>2021-04-27 14:58</time>
+            Created At : <time class="date" title='Updated At: 2021-06-27 18:52:51'>2021-04-27 14:58</time>
         
     </div>
     <div class="article-meta">
@@ -663,27 +663,27 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="键盘布局常见函数"><a href="#键盘布局常见函数" class="headerlink" title="键盘布局常见函数"></a>键盘布局常见函数</h2><p>GetKeyboardLayout，函数原型如下，返回值为HKL类型，1个参数且参数类型为DWORD类型。<br>要查询的线程的标识符，<strong>对于当前线程为0。</strong><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getkeyboardlayout">相关链接</a></p>
-<p><img src="/img/image-20210427160634922.png"></p>
-<p>GetKeyboardLayoutList，函数原型如下，返回值为int类型，2个参数，第1个参数为缓冲区容纳的最大句柄数，第2个参数为HKL*的指针。<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getkeyboardlayoutlist">相关链接</a><br><img src="/img/image-20210427164250329.png"></p>
+<p><img src="/img/%E9%94%AE%E7%9B%98%E5%B8%83%E5%B1%80%E9%82%A3%E4%BA%9B%E4%BA%8B/image-20210427160634922.png"></p>
+<p>GetKeyboardLayoutList，函数原型如下，返回值为int类型，2个参数，第1个参数为缓冲区容纳的最大句柄数，第2个参数为HKL*的指针。<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getkeyboardlayoutlist">相关链接</a><br><img src="/img/%E9%94%AE%E7%9B%98%E5%B8%83%E5%B1%80%E9%82%A3%E4%BA%9B%E4%BA%8B/image-20210427164250329.png"></p>
 <p>GetKeyboardLayoutName，函数原型如下，返回值为BOOL类型，1个参数且参数类型为LPSTR。<br>参数用于接收输入语言环境标识符的名称，包括终止的空字符。<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getkeyboardlayoutnamea">相关链接</a></p>
-<p><img src="/img/image-20210427164624547.png"></p>
+<p><img src="/img/%E9%94%AE%E7%9B%98%E5%B8%83%E5%B1%80%E9%82%A3%E4%BA%9B%E4%BA%8B/image-20210427164624547.png"></p>
 <h2 id="举一个栗子"><a href="#举一个栗子" class="headerlink" title="举一个栗子"></a>举一个栗子</h2><p>通过一个例子来看一下GetKeyboardLayout的返回值情况。</p>
-<p><img src="/img/image-20210427150427172.png"></p>
+<p><img src="/img/%E9%94%AE%E7%9B%98%E5%B8%83%E5%B1%80%E9%82%A3%E4%BA%9B%E4%BA%8B/image-20210427150427172.png"></p>
 <h2 id="语言标识符"><a href="#语言标识符" class="headerlink" title="语言标识符"></a>语言标识符</h2><p>语言标识符是国家/地区或地理区域中语言的标准国际数字缩写。每种语言都有一个唯一的语言标识符（数据类型LANGID），一个由主要语言标识符和子语言标识符组成的16位值。<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/intl/language-identifiers">相关链接</a><br>根据语言标识符中的解释来看，低10位值为主要语言标识符，高6位值为子语言标识符。</p>
-<p><img src="/img/image-20210427160526379.png"></p>
+<p><img src="/img/%E9%94%AE%E7%9B%98%E5%B8%83%E5%B1%80%E9%82%A3%E4%BA%9B%E4%BA%8B/image-20210427160526379.png"></p>
 <p>通过语言标识符找到LANG_SYSTEM_DEFAULT和LANG_USER_DEFAULT定义的地方。</p>
-<p><img src="/img/image-20210427160918529.png"></p>
+<p><img src="/img/%E9%94%AE%E7%9B%98%E5%B8%83%E5%B1%80%E9%82%A3%E4%BA%9B%E4%BA%8B/image-20210427160918529.png"></p>
 <p><strong>但是！但是！但是！</strong></p>
 <p>从LANG_SYSTEM_DEFAULT到后面找到LANG_NEUTRAL，走了很多的弯路，其中包括了找语言环境标识符常量数据对比查找。</p>
 <p><strong>发现第一次找跟键盘布局函数相关的资料，如此不熟悉，导致浪费了不少时间</strong><br><strong>还是通过默认的LANG_SYSTEM_DEFAULT可以找到LANG_NEUTRAL和SUBLANG_NEUTRAL的定义位置。</strong></p>
-<p><img src="/img/image-20210427161024165.png"></p>
+<p><img src="/img/%E9%94%AE%E7%9B%98%E5%B8%83%E5%B1%80%E9%82%A3%E4%BA%9B%E4%BA%8B/image-20210427161024165.png"></p>
 <p><strong>最后通过整理后发现有两种方式可以获取区域，第一种办法是取巧办法，第二种办法是常规办法</strong></p>
 <h2 id="取巧办法"><a href="#取巧办法" class="headerlink" title="取巧办法"></a>取巧办法</h2><p>SUBLANG_NEUTRAL可以直接<strong>对整个语言标识符(16位，一个字)搜索</strong>。</p>
-<p><img src="/img/image-20210427155426273.png"></p>
+<p><img src="/img/%E9%94%AE%E7%9B%98%E5%B8%83%E5%B1%80%E9%82%A3%E4%BA%9B%E4%BA%8B/image-20210427155426273.png"></p>
 <h2 id="常规方法"><a href="#常规方法" class="headerlink" title="常规方法"></a>常规方法</h2><p>如果未能找到相关语言的情况下，考虑使用常规办法。</p>
 <p><strong>主要语言标识符通过LANG_NEUTRAL，在VS中进行内容查找，位于winnt.h。</strong><br><strong>子语言标识符通过SUBLANG_NEUTRAL，在VS中进行内容查找，同样位于winnt.h。</strong></p>
 <h2 id="语言环境标识符"><a href="#语言环境标识符" class="headerlink" title="语言环境标识符"></a>语言环境标识符</h2><p><strong>每个语言环境都有一个唯一的标识符(32位,两个字)，该值由语言标识符和排序顺序标识符组成。</strong>语言环境标识符是标准的国际数字缩写，具有唯一标识已安装的操作系统定义的语言环境之一所必需的组件。NLS支持预定义的区域设置标识符和自定义标识符。</p>
-<p><img src="/img/image-20210427160433213.png"></p>
+<p><img src="/img/%E9%94%AE%E7%9B%98%E5%B8%83%E5%B1%80%E9%82%A3%E4%BA%9B%E4%BA%8B/image-20210427160433213.png"></p>
 <p>语言环境信息常量，常用LOCALE_ALL和CTRY_DEFAULT 在VS中进行内容查找即可。<br>语言环境信息常量查询 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/intl/locale-information-constants">链接</a></p>
 
       

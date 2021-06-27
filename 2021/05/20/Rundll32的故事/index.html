@@ -611,7 +611,7 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2021-06-27 18:37:38'>2021-05-20 09:50</time>
+            Created At : <time class="date" title='Updated At: 2021-06-27 18:53:10'>2021-05-20 09:50</time>
         
     </div>
     <div class="article-meta">
@@ -663,14 +663,14 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="故事起源"><a href="#故事起源" class="headerlink" title="故事起源"></a>故事起源</h2><p>故事的起源于看到一个关于Rundll32的技术文章(<a target="_blank" rel="noopener" href="https://isc.sans.edu/diary/27428">相关链接</a>)。</p>
-<p><img src="/img/2021-05-20_141919.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-20_141919.png"></p>
 <h2 id="Rundll32执行JS代码"><a href="#Rundll32执行JS代码" class="headerlink" title="Rundll32执行JS代码"></a>Rundll32执行JS代码</h2><p><strong>本着复现和学习rundll32如何执行JS代码的原则开始了学习，同时也想加深rundll32的理解。</strong></p>
 <h3 id="原理分析-翻译搬运-原文链接"><a href="#原理分析-翻译搬运-原文链接" class="headerlink" title="原理分析(翻译搬运 原文链接)"></a>原理分析(翻译搬运 <a target="_blank" rel="noopener" href="https://thisissecurity.stormshield.com/2014/08/20/poweliks-command-line-confusion/">原文链接</a>)</h3><p>2014年7月份，国外研究机构发现了一个比较新型的恶意软件，<strong>这个恶意软件不会在系统上安装任何文件，而是藏身在windows的注册表中通过rundll32.exe执行javascript代码</strong>。</p>
 <p>听上去确实很有意思，通过rundll32.exe来执行js代码，那么它究竟是怎么实现的呢？我们一起来研究下。</p>
 <p>实现代码很简单</p>
 <pre><code>rundll32.exe javascript:&quot;\..\mshtml,RunHTMLApplication &quot;;alert(‘foo’);</code></pre>
 <p>在cmd下运行后就能弹窗。</p>
-<p><img src="/img/2021-05-24_130024.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-24_130024.png"></p>
 <p>下面我们一起来看看究竟是怎么回事。</p>
 <h4 id="Rundll32是什么"><a href="#Rundll32是什么" class="headerlink" title="Rundll32是什么"></a>Rundll32是什么</h4><p>先看下MSDN给出的介绍<a target="_blank" rel="noopener" href="http://support.microsoft.com/kb/164787/">MSDN</a></p>
 <p>从介绍中可以看出，Rundll32的作用是执行DLL文件中的内部函数。</p>
@@ -681,22 +681,22 @@
 <p>下面我们来试着解决为什么rundll32.exe javascript:”..\mshtml,RunHTMLApplication “;alert(‘foo’);这个语句能执行js。</p>
 <h4 id="Rundll32分析"><a href="#Rundll32分析" class="headerlink" title="Rundll32分析"></a>Rundll32分析</h4><p><strong>参数</strong></p>
 <p>Rundll32首先要调用ParseCommand函数把传进来的参数分割，函数会搜索逗号(‘,’, 0x2C)来定位DLL名字。搜索空格(‘ ‘, 0x20)来定位入口点。</p>
-<p><img src="/img/2021-05-24_130040.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-24_130040.png"></p>
 <p>在我们输入的命令中，ParseCommand返回javascript:”..\mshtml作为DLL名称，RunHTMLApplication作为入口点。</p>
-<p><img src="/img/2021-05-24_130055.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-24_130055.png"></p>
 <h4 id="Dll-loader"><a href="#Dll-loader" class="headerlink" title="Dll loader"></a>Dll loader</h4><p>下面Rundll32会试图读取名称为javascript:”..\mshtml的DLL。</p>
 <p>首先他会尝试调用GetFileAttributes(“javascript:”..\mshtml”)来读取文件，最终函数会访问C:\Windows\system32\mshtml这个文件，但是由于文件不存在，函数返回-1。</p>
-<p><img src="/img/2021-05-24_130221.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-24_130221.png"></p>
 <p>然后函数会调用SearchPath来寻找DLL名称。这个函数会读取注册表中HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\SafeProcessSearchMode的键值。关于这点MSDN给出的介绍<a target="_blank" rel="noopener" href="http://msdn.microsoft.com/zh-cn/library/windows/desktop/aa365527(v=vs.85).aspx">MSDN</a></p>
 <p>当他的键值为1时，SearchPath首先搜索系统路径中指定的文件夹，然后搜索当前工作目录。当键值为0时，正好相反，首先会搜索当前工作目录，然后搜索系统路径。</p>
 <p>在(on Windows XP / 7 / 8)的默认情况下这个键值不存在，<strong>所以SearchPath会试图在当前工作目录（c:\windows\system32）读取mshtml</strong>。</p>
-<p><img src="/img/2021-05-24_130230.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-24_130230.png"></p>
 <p>当都读取不到时，rundll32开始进入下一步工作，GetFileAttributes被重新调用来搜索javascript:”..\mshtml.manifest。</p>
-<p><img src="/img/2021-05-24_130245.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-24_130245.png"></p>
 <p>当这些都失败后Rundll32最终会调用LoadLibrary(“javascript:”..\mshtml”)。</p>
 <pre><code>LoadLibrary是存在在ntdll.dll中包装LdrLoadDll的函数，内在地LdrLoadDll加载了默认的扩展名.dll然后把结果字符串javascript:”\..\mshtml.dll作为了路径。”..”符号代表着跳转到上一级。上一个指令解析到了mshtml.dll(例如foo\..\mshtml.dll 解析为 mshtml.dll)</code></pre>
 <p>通过指定mshtml.dll，LdrLoadDll能够调用在系统目录的库。</p>
-<p> <img src="/img/2021-05-24_130255.png"></p>
+<p> <img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-24_130255.png"></p>
 <p>Rundll32然后根据以前从RunHTMLApplication提取的入口点的名字调用GetProcAddress。到目前为止前缀javascript:似乎没起到什么作用，LoadLibrary(“foobar:&quot;..\mshtml”)工作正常。那么javascript:是怎么被加上的呢？</p>
 <h4 id="协议处理"><a href="#协议处理" class="headerlink" title="协议处理"></a>协议处理</h4><p>一旦Rundll32得到了入口地址就会调用函数mshtml.dll!RunHTMLAppliction.</p>
 <p>该函数并比未出现在微软的官方文档中，但其函数原型可以通过c:\windows\system32\mshta.exe（用来启动.hta文件的程序）对其的调用推断出来：</p>
@@ -717,67 +717,67 @@ int nCmdShow
 <p>第二个参数并未被用到，即使不匹配也没啥事。</p>
 <p>最后一个参数nCmdShow由于指定RunHTMLApplication是否显示HTML应用的窗口。Rundll32调用入口的时候总是传入SW_SHOWDEFAULT来显示窗口到默认位置。</p>
 <p>我们主要关心的参数是lpszCmdLine，这里传入的应该是””;alert(‘foo’)”。</p>
-<p><img src="/img/2021-05-24_130312.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-24_130312.png"></p>
 <p>很明显，这不是一个合法的JavaScript语句（末尾缺失双引号）。但本例中却是有效的，因为RunHTMLApplication会忽略该参数，而调用API GetCommandLine（包装在GetCmdLine函数中）来获取参数。</p>
-<p><img src="/img/2021-05-24_130321.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-24_130321.png"></p>
 <p>完整的命令行包含可执行文件的名字和参数，GetCmdLine会去掉可自行文件名，提取出参数：</p>
-<p><img src="/img/2021-05-24_130332.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-24_130332.png"></p>
 <p>然后，RunHTMLApplication 会调用CreateUrlMoniker：</p>
-<p><img src="/img/2021-05-24_130345.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-24_130345.png"></p>
 <p>该处传入的字符串”javascriopt:”是必须的。</p>
 <p>CreateUrlMoniker解析命令行并提取出”:”之前的字符串，即“javascript”。</p>
-<p><img src="/img/2021-05-24_130358.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-24_130358.png"></p>
 <pre><code>CreateUrlMoniker会读取注册表HKCR\SOFTWARE\Classes\PROTOCOLS\Handler\ 中的值，其中存储了协议和其对应的CLSID。
 CreateUrlMoniker会为JavaScript寻找合适的协议处理器
 (HKCR\SOFTWARE\Classes\PROTOCOLS\Handler\javascript):</code></pre>
-<p><img src="/img/2021-05-24_130412.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-24_130412.png"></p>
 <p>该CLSID{3050F3B2-98B5-11CF-BB82-00AA00BDCE0B} 对应 “Microsoft HTML Javascript Pluggable Protocol”。</p>
-<p><img src="/img/2021-05-24_130431.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-24_130431.png"></p>
 <p>正是因为这样，所以参数必须以”javascript”开始。</p>
 <p>在IE中输入javascript:alert(‘foo’) 也是同样处理的机制：</p>
-<p><img src="/img/2021-05-24_130455.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-24_130455.png"></p>
 <pre><code>“:”之后的字符串会被JavaScript URL moniker当成JavaScript指令解析执行：
 &quot;\..\mshtml,RunHTMLApplication &quot;;alert(&#39;foo&#39;);</code></pre>
 <p>这是一段合法的JavaScript，包含一个字符串”..\mshtml,RunHTMLApplication “ （包括之前被忽略过的双引号!）和一个函数(alert)。</p>
 <p>最后RunHTMLApplication 会调用CHTMLApp::Run 并运行JavaScript:</p>
-<p><img src="/img/2021-05-24_130024-1621832914840.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-24_130024-1621832914840.png"></p>
 <h4 id="安全"><a href="#安全" class="headerlink" title="安全"></a>安全</h4><p>从安全的角度来看这个问题，通过Rundll32来执行javascript类似执行 HTML应用。也就是说，我们能使用IE的所有功能—对象模型，性能，渲染和协议支持—但却没有开启安全全限制和用户界面。因为域安全特性（同源策略）也是关闭的，所以可以跨域执行脚本，并具有本地文件系统和注册表的读写权限。</p>
 <p><strong>通过这个trick，可以让javascript在IE进程以外执行，同时又不受Vista等的保护模式和沙盒等安全策略的限制。所以我认为这个小技巧以后会有更多的利用空间。</strong></p>
 <h3 id="技术复现"><a href="#技术复现" class="headerlink" title="技术复现"></a>技术复现</h3><p>根据文章里的描述，这里选择了使用alert()函数来执行弹框的操作。<strong>有意思的是RunHTMLApplication之后必须存在空格，才能够解析相关参数部分。</strong></p>
-<p><img src="/img/2021-05-19_154318.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-19_154318.png"></p>
 <p>当代码执行后成功弹出提示框。</p>
-<p><img src="/img/2021-05-19_154650.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-19_154650.png"></p>
 <p>查看相关进程信息cmd会启动rundll32进程，相关参数显示在Comand Line中。</p>
-<p><img src="/img/2021-05-19_154730.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-19_154730.png"></p>
 <p>当交互式操作完成后会自动弹出对应的图形化界面，若没有相应的交互式操作则直接弹出图形化界面。</p>
-<p><img src="/img/2021-05-19_154737.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-19_154737.png"></p>
 <h3 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h3><p><strong>问题：现在的问题是当JS命令执行后会出现对应的Rundll32的相关进程，容易暴露执行的相关JS代码。</strong></p>
-<p><img src="/img/2021-05-20_142422.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-20_142422.png"></p>
 <h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p><strong>解决1：</strong>通过tasklist和findstr去找到对应的pid。</p>
-<p><img src="/img/2021-05-20_143035.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-20_143035.png"></p>
 <p>通过for语法和taskkill去关闭指定的进程。</p>
-<p><img src="/img/2021-05-20_143953.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-20_143953.png"></p>
 <p><strong>解决2：</strong>通过taskkill /f /im rundll32.exe</p>
-<p><img src="/img/2021-05-20_144249.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-20_144249.png"></p>
 <p><strong>本以为将两段bat命令合在一起聚大功告成，却发现到最后小丑竟是我自己。</strong></p>
-<p><img src="/img/2021-05-20_144832.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-20_144832.png"></p>
 <p>cmd可以执行的执行写入bat后运行缺有相关错误，另外本想通过bat祛除掉图形化界面，经多次测试发现bat应该是不支持多进程/多线程。</p>
 <p><strong>在经历了bat多次尝试和失望后，本应该就要放弃了。</strong></p>
 <p><strong>但还是决定用多进程或多线程来尝试一次。</strong></p>
 <p><strong>解决3：</strong>编程实现多进程/多线程操作</p>
 <p>刚开始时本想用CreateProcess但是一想参数过多 不必要就换了ShellExecute函数。</p>
 <p>刚开始代码雏形如下所示，主要就是进行两个步骤的执行操作。</p>
-<p><img src="/img/2021-05-20_150229.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-20_150229.png"></p>
 <p>编译后由于当时忘记在两段代码直接加入间隔，一瞬间就执行结束了。</p>
 <p><strong>可能是之前的期望太低了，都不抱成功的期望。</strong></p>
 <p>但还是加上了sleep函数，间隔5s。</p>
-<p><img src="/img/2021-05-20_151001.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-20_151001.png"></p>
 <p>重新编译后执行，终于成功的实现了先执行JS代码，后关闭rundll32的进程。</p>
 <p><strong>老泪纵横，不容易，实在是太不容易了。</strong></p>
-<p><img src="/img/2021-05-19_154836.gif"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-19_154836.gif"></p>
 <h3 id="意料之外"><a href="#意料之外" class="headerlink" title="意料之外"></a>意料之外</h3><p>在虚拟机下win7测试时发现可以执行对应的JS代码。</p>
 <p>但是当在win10下运行时不但没有成功执行JS代码，还被杀软给拦截了。</p>
-<p><img src="/img/2021-05-20_151112.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-20_151112.png"></p>
 <p><strong>并且由于目前杀软对rundll32检测比之前更加严格，一旦参数中带有Rundll32 javascript:等相关信息则会被杀软拦截，加速了rundll32执行JS相关利用技术的没落。</strong></p>
 <h3 id="测试案例"><a href="#测试案例" class="headerlink" title="测试案例"></a>测试案例</h3><p>由于没有找到比较合适的案例，所以这里采取了一些测试案例进行相关演示。</p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Fly_hps/article/details/115871613">案例来源参考</a></p>
@@ -788,70 +788,70 @@ CreateUrlMoniker会为JavaScript寻找合适的协议处理器
 <p><strong>win10系统成功弹出calc计算器，不过同时也弹出了相关空白网页，通过截图可以看到窗口的标题包含了执行的相关代码。</strong></p>
 <p>win7系统下测试没有弹出计算器。</p>
 <p><strong>这也是为什么之前想要通过某些手段来关掉这个的原因。</strong></p>
-<p><img src="/img/2021-05-24_131705.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-24_131705.png"></p>
 <p><strong>案例2</strong>：通过rundll32来弹出cmd命令行。</p>
 <p>原始命令如下所示。</p>
 <pre><code>@run^dll^32 java^script:&quot;\..\mshtml.dll,RunHTMLApplication &quot;;%64%6f%63%75%6d%65%6e%74%2e%77%72%69%74%65%28%29;%6e%65%77%20%41%63%74%69%76%65%58%4f%62%6a%65%63%74%28&#39;\x57\x53\x63\x72\x69\x70\x74\x2e\x53\x68\x65\x6c\x6c&#39;%29.%52%75%6e%28&#39;\u0043\u003a\u005c\u0057\u0069\u006e\u0064\u006f\u0077\u0073\u005c\u0053\u0079\u0073\u0074\u0065\u006d\u0033\u0032\u005c\u0063\u006d\u0064\u002e\u0065\u0078\u0065&#39;%29</code></pre>
 <p>经过对URL编码的转化得到部分命令如下。</p>
-<p><img src="/img/2021-05-24_133420.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-24_133420.png"></p>
 <p>对剩余的部分做相关处理后得到完整的命令代码如下所示。</p>
 <pre><code>rundll32.exe javascript:&quot;\\..\\mshtml.dll,RunHTMLApplication &quot;;document.write();new ActiveXObject(&#39;WScript.Shell&#39;).Run(&#39;C:\Windows\System32\cmd.exe&#39;);</code></pre>
 <p><strong>对于为什么要进行编码处理，应该是因为new ActiveXObject中间有一个空格。</strong></p>
 <p><strong>而rundll32无法直接处理这个空格就出现了语法错误的提示。进而需要对命令进行相关编码处理。</strong></p>
-<p><img src="/img/2021-05-24_133546.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-24_133546.png"></p>
 <p><strong>案例3</strong>：利用cs生成exe、vbs、和powershell三种类型的hta文件。</p>
-<p><img src="2021-05-24_133946.png" alt="/img/2021-05-24_133946"></p>
+<p><img src="2021-05-24_133946.png" alt="/img/Rundll32的故事/2021-05-24_133946"></p>
 <p>vbs类型主要通过vbs的脚本去完成相关功能的实现。</p>
 <pre><code>rundll32.exe url.dll,OpenURL &quot;c:\\Users\\admin\\Desktop\\vbs.hta&quot;</code></pre>
-<p><img src="/img/2021-05-24_135502-1621835832974.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-24_135502-1621835832974.png"></p>
 <p>exe类型主要是通过VBS去将内部的PE文件写入并执行的方式。</p>
 <pre><code>rundll32.exe url.dll,OpenURL &quot;c:\\Users\\admin\\Desktop\\exe.hta&quot;</code></pre>
 <p><img src="2021-05-24_135534.png"></p>
 <p>powershell类型通过创建Wscript.Shell对象去调用powershell程序完成相关功能。</p>
 <pre><code>rundll32.exe url.dll,OpenURL &quot;c:\\Users\\admin\\Desktop\\powershell.hta&quot;</code></pre>
-<p><img src="/img/2021-05-24_135557.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-24_135557.png"></p>
 <p>提前提到了rundll32执行dll代码，接下来说一下rundll32执行DLL的部分。</p>
 <h2 id="Rundll32执行DLL代码"><a href="#Rundll32执行DLL代码" class="headerlink" title="Rundll32执行DLL代码"></a>Rundll32执行DLL代码</h2><p>根据百度的相关关键字解释得知，rundll32最重要的作用还是调用DLL的相关函数功能。</p>
-<p><img src="/img/2021-05-20_154355.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-20_154355.png"></p>
 <h3 id="正常的DLL调用"><a href="#正常的DLL调用" class="headerlink" title="正常的DLL调用"></a>正常的DLL调用</h3><p>根据之前的JS代码调用追加了DLL调用功能，其作用为弹出提示框。</p>
-<p><img src="/img/2021-05-20-151815.gif"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-20-151815.gif"></p>
 <h3 id="恶意DLL调用"><a href="#恶意DLL调用" class="headerlink" title="恶意DLL调用"></a>恶意DLL调用</h3><p>CS的远控DLL，利用CS生成相关dll利用dll中的StartW函数即可完成上线操作。</p>
-<p><img src="/img/2021-05-20_160154.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-20_160154.png"></p>
 <p>执行如下命令后CS主机上线。</p>
-<p><img src="/img/2021-05-20_161232.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-20_161232.png"></p>
 <h3 id="rundll32进程注入"><a href="#rundll32进程注入" class="headerlink" title="rundll32进程注入"></a>rundll32进程注入</h3><p><strong>除了利用rundll32来执行DLL代码之外的，还有利用rundll32进程来进行进程注入。</strong></p>
 <p>利用CS生成MSOffice宏攻击代码，可以看到默认采用的runll32进程来完成相关进程注入。</p>
-<p><img src="/img/2021-05-20_161437.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-20_161437.png"></p>
 <h3 id="真实案例分享"><a href="#真实案例分享" class="headerlink" title="真实案例分享"></a>真实案例分享</h3><p>样本是一个钓鱼邮件并且带有宏代码。</p>
 <p>打开宏问题提示启用宏，默认情况下Office宏是禁用的状态。</p>
-<p><img src="/img/2021-05-21_133035.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-21_133035.png"></p>
 <p>点击启用宏弹出错误提示框，并且无相关CS回连信息。</p>
 <p><strong>经过多次的测试发现，这是由于Office版本不适配造成Macros文件解析不出来。</strong></p>
 <p><strong>虚拟机测试是使用的是Office2010，本机测试时使用的是Office2016(断网测试)。</strong></p>
 <p><strong>注意防毒，注意防毒，注意防毒。</strong></p>
-<p><img src="/img/2021-05-21_133040.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-21_133040.png"></p>
 <p>对宏文件进行分析发现，可能是Macros的文件被隐藏了。</p>
 <p><strong>你小子可真会玩(hello sb)。</strong></p>
-<p><img src="/img/2021-05-21_133046.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-21_133046.png"></p>
 <p>使用olevba工具对宏文件进行分析，通过结论看到VBAcode和p-code不相等，即被人故意修改隐藏掉了。</p>
-<p><img src="/img/2021-05-21_133050.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-21_133050.png"></p>
 <p>使用pcodedmp可查看p-code代码，以下是部分p-code代码截图。</p>
-<p><img src="/img/2021-05-21_133120.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-21_133120.png"></p>
 <p>通过pcode2code工具可以直接将p-code保存为VBACode。</p>
 <p><strong>感谢顾何师傅的帮助~</strong> </p>
 <p><strong>感谢顾何师傅的帮助~</strong> </p>
 <p><strong>感谢顾何师傅的帮助~</strong> </p>
-<p><img src="/img/2021-05-21_133145.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-21_133145.png"></p>
 <p>得到对应的VBACode并提取出重要的攻击代码部分。</p>
-<p><img src="/img/2021-05-21_133230.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-21_133230.png"></p>
 <p>根据freebuff得到，有一种方式是通过CS生成对应的MSOffice宏来完成主机上线。</p>
-<p><img src="/img/2021-05-21_133534.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-21_133534.png"></p>
 <p>生成一个test.docm的测试模板，并将CS生成的MSOffice宏代码复制到word中。</p>
-<p><img src="/img/2021-05-21_133632.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-21_133632.png"></p>
 <p><strong>对比后发现除了Array数组不同，其余部分代码完全一致，可以断定这是一个CS生成的MSOffice宏病毒模板</strong>。</p>
-<p><img src="/img/2021-05-21_133720.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-21_133720.png"></p>
 <p>分析调试后，<strong>捕获到CS的回连服务器IP由于原因特殊，这里将IP打码处理</strong>。</p>
-<p><img src="/img/2021-05-21_133832.png"></p>
+<p><img src="/img/Rundll32%E7%9A%84%E6%95%85%E4%BA%8B/2021-05-21_133832.png"></p>
 <p><strong>自此Rundll32的故事就讲完了，期待下次见面。</strong></p>
 
       
